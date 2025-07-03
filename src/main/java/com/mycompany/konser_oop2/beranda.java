@@ -182,7 +182,7 @@ public class beranda extends javax.swing.JFrame {
      public void detailBooking(String konserId){
          
          try{
-                 panelDetBooking.removeAll();
+         panelDetBooking.removeAll();
         panelDetBooking.setLayout(new BorderLayout());
 
         // Panel Card (mirip col-7 Bootstrap)
@@ -199,54 +199,7 @@ public class beranda extends javax.swing.JFrame {
             "Transfer Bank", "E-Wallet", "Kartu Kredit"
         });
         JLabel lblHarga = new JLabel("Harga: -");
-
-        // Map penyimpanan data dari DB
-        Map<String, Integer> hargaMap = new HashMap<>();
-        Map<String, Integer> kursiMap = new HashMap<>();
-        Set<Integer> kursiTerpakai = new HashSet<>();
-        int jumlahTiket = 0;
         
-        // Query kategori tiket dan jumlah kursi
-        Connection conn = connection.getConnection();
-        String query ="Select k.nama_konser, k.lokasi, k.jam, k.tanggal, k.id_konser, kt.kategori_konser, d.harga_tiket, d.jumlah_tiket, p.kursi " + 
-                    "from konser k " + "JOIN detail_kategori_tiket d on k.id_konser = d.id_konser " + "jOIN kategori_tiket kt on d.id_kategori_tiket = kt.id_kategori_tiket "
-                    +"JOIN riwayat_pembeli on rp d.id_det_tiket = rp.id_det_tiket " + "where d.id_konser = ?";
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, konserId);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            String kategori = rs.getString("kategori_konser");
-            int harga = rs.getInt("harga_tiket");
-            int jumlahKursi = rs.getInt("jumlah_tiket");
-            int kursi = rs.getInt("kursi");
-            
-            if(kursi !=0){
-                kursiTerpakai.add(kursi);
-            }
-
-            hargaMap.put(kategori, harga);
-            kursiMap.put(kategori, jumlahKursi);
-
-            cmbKategori.addItem(kategori);
-        }
-
-        // Listener kategori: update harga dan kursi
-        cmbKategori.addActionListener(e -> {
-            String selected = (String) cmbKategori.getSelectedItem();
-            Integer harga = hargaMap.get(selected);
-            Integer maxKursi = kursiMap.get(selected);
-
-            lblHarga.setText(harga != null ? "Harga: Rp " + harga : "Harga: -");
-
-            cmbKursi.removeAllItems();
-            if (maxKursi != null) {
-                for (int i = 1; i <= maxKursi; i++) {
-                    if(!)
-                    cmbKursi.addItem(String.valueOf(i));
-                }
-            }
-        });
 
         // Label dan komponen ditambahkan ke panel
         cardPanel.add(new JLabel("Nama Pemesan:"));
