@@ -1,6 +1,7 @@
 
 package com.mycompany.konser_oop2;
 import com.mycompany.konser_oop2.connection;
+import com.mycompany.konser_oop2.detailKonser;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
@@ -11,7 +12,6 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
 import com.formdev.flatlaf.FlatLightLaf;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -160,7 +160,10 @@ public class beranda extends javax.swing.JFrame {
                public void actionPerformed(ActionEvent e){
                    JButton clickedButton = (JButton) e.getSource();
                    String konserId = (String) clickedButton.getClientProperty("id");
-                   detailBooking(konserId);
+                   
+                   new detailKonser(konserId ).setVisible(true);
+                    dispose();
+                  
                } 
             });
 
@@ -179,73 +182,7 @@ public class beranda extends javax.swing.JFrame {
         }
     }
       
-     public void detailBooking(String konserId){
-         
-         try{
-         panelDetBooking.removeAll();
-        panelDetBooking.setLayout(new BorderLayout());
-
-        // Panel Card (mirip col-7 Bootstrap)
-        JPanel cardPanel = new JPanel();
-        cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
-        cardPanel.setBorder(BorderFactory.createTitledBorder("Form Pemesanan Tiket"));
-        cardPanel.setPreferredSize(new Dimension(500, 300));
-
-        // Komponen input
-        JTextField txtNama = new JTextField();
-        JComboBox<String> cmbKategori = new JComboBox<>();
-        JComboBox<String> cmbKursi = new JComboBox<>();
-        JComboBox<String> cmbPembayaran = new JComboBox<>(new String[] {
-            "Transfer Bank", "E-Wallet", "Kartu Kredit"
-        });
-        JLabel lblHarga = new JLabel("Harga: -");
-        
-
-        // Label dan komponen ditambahkan ke panel
-        cardPanel.add(new JLabel("Nama Pemesan:"));
-        txtNama.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-        cardPanel.add(txtNama);
-
-        cardPanel.add(Box.createVerticalStrut(10));
-        cardPanel.add(new JLabel("Kategori Tiket:"));
-        cardPanel.add(cmbKategori);
-
-        cardPanel.add(Box.createVerticalStrut(10));
-        cardPanel.add(new JLabel("Jumlah Kursi:"));
-        cardPanel.add(cmbKursi);
-
-        cardPanel.add(Box.createVerticalStrut(10));
-        cardPanel.add(new JLabel("Metode Pembayaran:"));
-        cardPanel.add(cmbPembayaran);
-
-        cardPanel.add(Box.createVerticalStrut(10));
-        cardPanel.add(lblHarga);
-
-        // Tombol simpan
-        JButton btnSimpan = new JButton("Simpan Pembayaran");
-        btnSimpan.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cardPanel.add(Box.createVerticalStrut(20));
-        cardPanel.add(btnSimpan);
-
-        // Tombol kembali
-        JButton btnBack = new JButton("Kembali");
-        btnBack.addActionListener(e -> cardLayout.show(mainPanel, "Beranda"));
-
-        // Tambahkan ke panel utama
-        panelDetBooking.add(cardPanel, BorderLayout.CENTER);
-        panelDetBooking.add(btnBack, BorderLayout.SOUTH);
-
-        panelDetBooking.revalidate();
-        panelDetBooking.repaint();
-        cardLayout.show(mainPanel, "Detail Booking");
-
-         } catch(Exception e){
-             e.printStackTrace();
-         }
-         
-         
-     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
