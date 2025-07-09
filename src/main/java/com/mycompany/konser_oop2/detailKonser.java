@@ -42,7 +42,7 @@ public class detailKonser extends javax.swing.JFrame {
     private int kursiBooking;
     private String idPembeli;
     private String metodePembayaran;
-    private String id
+    private String id;
 
     
     
