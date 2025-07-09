@@ -1,11 +1,10 @@
-<<<<<<< HEAD
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.konser_oop2;
 
-=======
 
 package com.mycompany.konser_oop2;
 
@@ -32,15 +31,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-
->>>>>>> 7a3d181f203458bd566062f25dd54711f8640ff2
 /**
  *
  * @author Gita Aulia Hafid
  */
 public class detailKonser extends javax.swing.JFrame {
 
-<<<<<<< HEAD
     /**
      * Creates new form detailKonser
      */
@@ -59,7 +55,7 @@ public class detailKonser extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-=======
+
     private String defaultNamaKonserLbl;
     private String defaultJudulLbl;
     private String defaultTanggalLbl;
@@ -233,18 +229,17 @@ public class detailKonser extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
->>>>>>> 7a3d181f203458bd566062f25dd54711f8640ff2
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-<<<<<<< HEAD
+
             .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
-=======
+
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -281,13 +276,12 @@ public class detailKonser extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(panelBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
->>>>>>> 7a3d181f203458bd566062f25dd54711f8640ff2
+
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-<<<<<<< HEAD
     /**
      * @param args the command line arguments
      */
@@ -324,7 +318,7 @@ public class detailKonser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-=======
+
     private void usernameBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameBookActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_usernameBookActionPerformed
@@ -472,6 +466,5 @@ public class detailKonser extends javax.swing.JFrame {
     private javax.swing.JLabel tanggalLbl;
     private javax.swing.JTextField usernameBook;
     private javax.swing.JLabel usernameLbl;
->>>>>>> 7a3d181f203458bd566062f25dd54711f8640ff2
     // End of variables declaration//GEN-END:variables
 }
