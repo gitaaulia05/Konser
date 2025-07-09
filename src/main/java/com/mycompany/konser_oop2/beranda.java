@@ -1,6 +1,10 @@
 
 package com.mycompany.konser_oop2;
 import com.mycompany.konser_oop2.connection;
+<<<<<<< HEAD
+=======
+import com.mycompany.konser_oop2.detailKonser;
+>>>>>>> 7a3d181f203458bd566062f25dd54711f8640ff2
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
@@ -11,7 +15,10 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7a3d181f203458bd566062f25dd54711f8640ff2
 import com.formdev.flatlaf.FlatLightLaf;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -160,7 +167,14 @@ public class beranda extends javax.swing.JFrame {
                public void actionPerformed(ActionEvent e){
                    JButton clickedButton = (JButton) e.getSource();
                    String konserId = (String) clickedButton.getClientProperty("id");
+<<<<<<< HEAD
                    detailBooking(konserId);
+=======
+                   
+                   new detailKonser(konserId ).setVisible(true);
+                    dispose();
+                  
+>>>>>>> 7a3d181f203458bd566062f25dd54711f8640ff2
                } 
             });
 
@@ -179,6 +193,7 @@ public class beranda extends javax.swing.JFrame {
         }
     }
       
+<<<<<<< HEAD
      public void detailBooking(String konserId){
          
          try{
@@ -246,6 +261,9 @@ public class beranda extends javax.swing.JFrame {
          
      }
 
+=======
+    
+>>>>>>> 7a3d181f203458bd566062f25dd54711f8640ff2
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
