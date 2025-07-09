@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -23,6 +25,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -38,14 +42,16 @@ public class detailKonser extends javax.swing.JFrame {
     private String defaultLokasiLbl;
     
     // nilai buat insert ke database
+    private String id_riwayat;
+    private String id_pembeli;
+        // id_det_tiket
     private String selectedId;
+    private String id_konserBook;
+    
     private int kursiBooking;
-    private String idPembeli;
     private String metodePembayaran;
-    private String id;
+    private String tanggal_transaksi;
 
-    
-    
     public detailKonser(String konserId) {
         initComponents();
         detailBooking(konserId);
@@ -266,6 +272,42 @@ public class detailKonser extends javax.swing.JFrame {
     }//GEN-LAST:event_PembayaranComboActionPerformed
 
     private void pesananBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesananBtnActionPerformed
+       id_riwayat = UUID.randomUUID().toString();
+       id_pembeli = "2007cf89-dd68-450c-9c32-268ae43764fd";
+       
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+       tanggal_transaksi = LocalDateTime.now().format(formatter);
+       String metodePembayaran = "BCA";
+       
+       try {
+           Connection conn = connection.getConnection();
+           Statement stmt = conn.createStatement();
+           String queryIrp = "INSERT INTO riwayat_pembeli " + 
+                   "(id_riwayat, id_pembeli, id_det_tiket, id_konser, kursi, metode_pembayaran) " +
+                   "VALUES (?, ?, ?, ?, ?, ?)";
+           PreparedStatement irp = conn.prepareStatement(queryIrp);
+           
+           irp.setString(1, id_riwayat);
+           irp.setString(2, id_pembeli);
+           irp.setString(3, selectedId);
+           irp.setString(4, id_konserBook);
+           irp.setInt(5, kursiBooking);
+           irp.setString(6, metodePembayaran);
+          // irp.setString(7, tanggal_transaksi);
+           
+           int rowsAffected = irp.executeUpdate();
+           if(rowsAffected > 0){
+                new riwayatPembeli().setVisible(true);
+                    dispose();
+           } else {
+               JOptionPane.showMessageDialog(null, "Gagal menyimpan Data", 
+                       "Rrror", JOptionPane.ERROR_MESSAGE);
+           }
+           irp.close();
+           conn.close();
+       }catch(SQLException e){
+           e.printStackTrace();
+       }
        
     }//GEN-LAST:event_pesananBtnActionPerformed
  
@@ -288,9 +330,10 @@ public class detailKonser extends javax.swing.JFrame {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, konserId);
             ResultSet rs = ps.executeQuery();
-           
+            
             
             if(rs.next()) {
+             id_konserBook = rs.getString("id_konser");
              String nama_konser = rs.getString("nama_konser");
              String nama_band = rs.getString("nama_band");
              String tanggal = rs.getString("tanggal");
