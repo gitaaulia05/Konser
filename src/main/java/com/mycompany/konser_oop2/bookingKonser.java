@@ -1,4 +1,7 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package com.mycompany.konser_oop2;
 
 import com.mycompany.konser_oop2.connection;
@@ -28,125 +31,126 @@ import java.util.Set;
 import java.util.UUID;
 import javax.swing.JOptionPane;
 
-
-/**
- *
- * @author Gita Aulia Hafid
- */
-public class detailKonser extends javax.swing.JFrame {
-
-    private String defaultNamaKonserLbl;
-    private String defaultJudulLbl;
-    private String defaultTanggalLbl;
-    private String defaultJamLbl;
-    private String defaultLokasiLbl;
+public class bookingKonser extends javax.swing.JFrame {
     
-    // nilai buat insert ke database
+    // Variabel untuk database
     private String id_riwayat;
     private String id_pembeli;
-        // id_det_tiket
-    private String selectedId;
+    private String selectedId;  // id_det_tiket
     private String id_konserBook;
     
     private int kursiBooking;
     private String metodePembayaran;
     private String tanggal_transaksi;
 
-    public detailKonser(String konserId) {
+    public bookingKonser(String konserId) {
         initComponents();
-        detailBooking(konserId);
-        
+        bookingKonserMain(konserId);
     }
-   
+    
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        berandaLbl = new javax.swing.JLabel();
-        riwayatLbl = new javax.swing.JLabel();
-        usernameLbl = new javax.swing.JLabel();
-        panelDetKon = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jPanel1 = new javax.swing.JPanel();
+        panelDetailKonser = new javax.swing.JPanel();
         namaKonserLbl = new javax.swing.JLabel();
         judulLbl = new javax.swing.JLabel();
         tanggalLbl = new javax.swing.JLabel();
         jamLbl = new javax.swing.JLabel();
         lokasiLbl = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        usernameBook = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         panelBooking = new javax.swing.JPanel();
-        usernameBook = new javax.swing.JTextField();
+        jTextField1 = new javax.swing.JTextField();
         kategoriCombo = new javax.swing.JComboBox<>();
         kursiCombo = new javax.swing.JComboBox<>();
-        PembayaranCombo = new javax.swing.JComboBox<>();
+        pembayaranCombo = new javax.swing.JComboBox<>();
         pesananBtn = new javax.swing.JButton();
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Konserku");
-
-        berandaLbl.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        berandaLbl.setText("Beranda");
-
-        riwayatLbl.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        riwayatLbl.setText("Riwayat");
-
-        panelDetKon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        namaKonserLbl.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        namaKonserLbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        namaKonserLbl.setText("One ok rock");
+        namaKonserLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        namaKonserLbl.setText("ONE OK ROCK");
 
         judulLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        judulLbl.setText("Linkin Park");
+        judulLbl.setText("LINKIN PARK");
 
+        tanggalLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         tanggalLbl.setText("Juni 19, 2025");
 
-        jamLbl.setText("4.00 WIB");
+        jamLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jamLbl.setText("4:00 Pm wib");
 
-        lokasiLbl.setText("Stadion utama gbl, jakarta");
+        lokasiLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lokasiLbl.setText("Stadion Utama GBK, Jakarta");
 
-        javax.swing.GroupLayout panelDetKonLayout = new javax.swing.GroupLayout(panelDetKon);
-        panelDetKon.setLayout(panelDetKonLayout);
-        panelDetKonLayout.setHorizontalGroup(
-            panelDetKonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDetKonLayout.createSequentialGroup()
-                .addGroup(panelDetKonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelDetKonLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(namaKonserLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(panelDetKonLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(judulLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
-                        .addGroup(panelDetKonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lokasiLbl)
-                            .addGroup(panelDetKonLayout.createSequentialGroup()
-                                .addComponent(tanggalLbl)
-                                .addGap(27, 27, 27)
-                                .addComponent(jamLbl)))))
-                .addGap(44, 44, 44))
-        );
-        panelDetKonLayout.setVerticalGroup(
-            panelDetKonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDetKonLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(namaKonserLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelDetKonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(judulLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tanggalLbl)
-                    .addComponent(jamLbl))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lokasiLbl)
+        javax.swing.GroupLayout panelDetailKonserLayout = new javax.swing.GroupLayout(panelDetailKonser);
+        panelDetailKonser.setLayout(panelDetailKonserLayout);
+        panelDetailKonserLayout.setHorizontalGroup(
+            panelDetailKonserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDetailKonserLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(judulLbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelDetailKonserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lokasiLbl)
+                    .addGroup(panelDetailKonserLayout.createSequentialGroup()
+                        .addComponent(tanggalLbl)
+                        .addGap(52, 52, 52)
+                        .addComponent(jamLbl)))
+                .addGap(71, 71, 71))
+            .addGroup(panelDetailKonserLayout.createSequentialGroup()
+                .addGap(282, 282, 282)
+                .addComponent(namaKonserLbl)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+        panelDetailKonserLayout.setVerticalGroup(
+            panelDetailKonserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDetailKonserLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(namaKonserLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(panelDetailKonserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(judulLbl)
+                    .addComponent(tanggalLbl)
+                    .addComponent(jamLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lokasiLbl)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
 
-        usernameBook.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        usernameBook.setText("Nama User");
-        usernameBook.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usernameBookActionPerformed(evt);
-            }
-        });
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setText("KONSERKU");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setText("BERANDA");
+
+        usernameBook.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        usernameBook.setText("USERNAME");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setText("RIWAYAT");
+
+        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField1.setText("USERNAME");
+        jTextField1.setEnabled(false);
 
         kategoriCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         kategoriCombo.addActionListener(new java.awt.event.ActionListener() {
@@ -162,10 +166,10 @@ public class detailKonser extends javax.swing.JFrame {
             }
         });
 
-        PembayaranCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BCA", "MANDIRI", "SHOPEE PAY", "GOPAY" }));
-        PembayaranCombo.addActionListener(new java.awt.event.ActionListener() {
+        pembayaranCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mandiri", "BCA", "BRI" }));
+        pembayaranCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PembayaranComboActionPerformed(evt);
+                pembayaranComboActionPerformed(evt);
             }
         });
 
@@ -181,83 +185,72 @@ public class detailKonser extends javax.swing.JFrame {
         panelBookingLayout.setHorizontalGroup(
             panelBookingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBookingLayout.createSequentialGroup()
-                .addGroup(panelBookingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBookingLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(panelBookingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(kategoriCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(usernameBook)
-                            .addComponent(kursiCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(PembayaranCombo, 0, 242, Short.MAX_VALUE)))
-                    .addGroup(panelBookingLayout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(pesananBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGap(159, 159, 159)
+                .addGroup(panelBookingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pesananBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                    .addComponent(pembayaranCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(kursiCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(kategoriCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextField1))
+                .addContainerGap(110, Short.MAX_VALUE))
         );
         panelBookingLayout.setVerticalGroup(
             panelBookingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBookingLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(usernameBook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBookingLayout.createSequentialGroup()
+                .addContainerGap(32, Short.MAX_VALUE)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(kategoriCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(kursiCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(PembayaranCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pesananBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pembayaranCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(pesananBtn)
+                .addGap(32, 32, 32))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel1)
-                        .addGap(32, 32, 32)
-                        .addComponent(berandaLbl)
-                        .addGap(45, 45, 45)
-                        .addComponent(riwayatLbl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(usernameLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(39, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelDetKon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(32, 32, 32))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(panelDetailKonser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(21, 21, 21))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jLabel1)
+                .addGap(37, 37, 37)
+                .addComponent(jLabel2)
+                .addGap(31, 31, 31)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(usernameBook)
+                .addGap(77, 77, 77))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(78, 78, 78)
+                .addComponent(panelBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(127, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(usernameLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(berandaLbl)
-                            .addComponent(riwayatLbl))))
-                .addGap(34, 34, 34)
-                .addComponent(panelDetKon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(usernameBook))
+                .addGap(38, 38, 38)
+                .addComponent(panelDetailKonser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void usernameBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameBookActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_usernameBookActionPerformed
 
     private void kategoriComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kategoriComboActionPerformed
         // TODO add your handling code here:
@@ -267,12 +260,12 @@ public class detailKonser extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_kursiComboActionPerformed
 
-    private void PembayaranComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PembayaranComboActionPerformed
+    private void pembayaranComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pembayaranComboActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_PembayaranComboActionPerformed
+    }//GEN-LAST:event_pembayaranComboActionPerformed
 
     private void pesananBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesananBtnActionPerformed
-       id_riwayat = UUID.randomUUID().toString();
+        id_riwayat = UUID.randomUUID().toString();
        id_pembeli = "2007cf89-dd68-450c-9c32-268ae43764fd";
        
        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
@@ -308,10 +301,9 @@ public class detailKonser extends javax.swing.JFrame {
        }catch(SQLException e){
            e.printStackTrace();
        }
-       
     }//GEN-LAST:event_pesananBtnActionPerformed
- 
-    public void detailBooking(String konserId){
+
+    public void bookingKonserMain(String konserId){
         namaKonserLbl.setText("");
         judulLbl.setText("");
         tanggalLbl.setText("");
@@ -403,10 +395,9 @@ public class detailKonser extends javax.swing.JFrame {
          } catch(Exception e){
               e.printStackTrace();
          }
-         
-     }
+    }
     
-    private void updateKursiDipilih(){
+        private void updateKursiDipilih(){
          String selectedKursi = (String) kursiCombo.getSelectedItem();
          if(selectedKursi != null){
              try {
@@ -417,15 +408,18 @@ public class detailKonser extends javax.swing.JFrame {
              }
          }
     }
-
-    public static void main(String args[]) {
-      
-    }
+    /**
+     * @param args the command line arguments
+     */
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> PembayaranCombo;
-    private javax.swing.JLabel berandaLbl;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel jamLbl;
     private javax.swing.JLabel judulLbl;
     private javax.swing.JComboBox<String> kategoriCombo;
@@ -433,11 +427,10 @@ public class detailKonser extends javax.swing.JFrame {
     private javax.swing.JLabel lokasiLbl;
     private javax.swing.JLabel namaKonserLbl;
     private javax.swing.JPanel panelBooking;
-    private javax.swing.JPanel panelDetKon;
+    private javax.swing.JPanel panelDetailKonser;
+    private javax.swing.JComboBox<String> pembayaranCombo;
     private javax.swing.JButton pesananBtn;
-    private javax.swing.JLabel riwayatLbl;
     private javax.swing.JLabel tanggalLbl;
-    private javax.swing.JTextField usernameBook;
-    private javax.swing.JLabel usernameLbl;
+    private javax.swing.JLabel usernameBook;
     // End of variables declaration//GEN-END:variables
 }
