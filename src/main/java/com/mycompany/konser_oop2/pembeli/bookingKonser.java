@@ -5,7 +5,7 @@
 package com.mycompany.konser_oop2.pembeli;
 
 import com.mycompany.konser_oop2.connection;
-import com.mycompany.konser_oop2.connection;
+
 
 import java.awt.BorderLayout;
 import java.awt.Component;
