@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import com.mycompany.konser_oop2.pembeli.loginPembeli; // Diimpor oleh ind
+
 
 public class beranda extends javax.swing.JFrame {
 
@@ -37,43 +39,57 @@ public class beranda extends javax.swing.JFrame {
         loadGenreButtons();
     }
     
-    public void initUI(){
-       
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        
-        setTitle("Aplikasi Konser");
-        setSize(800, 500);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        
-        cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
-
-        tabs = new JTabbedPane();
-        
-        tabs.addChangeListener(e -> {
-           int selectedIndex = tabs.getSelectedIndex();
-           
-           if(selectedIndex != -1){
-               String genre = tabs.getTitleAt(selectedIndex);
-               filterGenre(genre);
-           }
-        });
-        panelGenre = new JPanel();
-        panelGenre.setLayout(new FlowLayout(FlowLayout.LEFT, 10,10));
-        
-        panelDetBooking = new JPanel();
-        
-        mainPanel.add(tabs, "Beranda");
-        mainPanel.add(panelDetBooking, "Detail Booking");
-        
-       getContentPane().setLayout(new BorderLayout());
-       getContentPane().add(mainPanel, BorderLayout.CENTER);
+  public void initUI() {
+    try {
+        UIManager.setLookAndFeel(new FlatLightLaf());
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+
+    setTitle("Aplikasi Konser");
+    setSize(800, 500);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setLocationRelativeTo(null);
+    setLayout(null); // penting agar bisa atur posisi manual dengan setBounds
+
+    cardLayout = new CardLayout();
+    mainPanel = new JPanel(cardLayout);
+    panelDetBooking = new JPanel();
+
+    // ========= PANEL HEADER ATAS (tabs + tombol Login) =========
+    JPanel headerPanel = new JPanel(null); // pakai null layout
+    headerPanel.setBounds(0, 0, 800, 50); // lebar penuh, tinggi 50
+    add(headerPanel); // tambahkan ke frame
+
+    // ======= TABS (Rock / Pop) =======
+    tabs = new JTabbedPane();
+    tabs.setBounds(10, 10, 600, 30); // letak tab (kiri)
+    tabs.addChangeListener(e -> {
+        int selectedIndex = tabs.getSelectedIndex();
+        if (selectedIndex != -1) {
+            String genre = tabs.getTitleAt(selectedIndex);
+            filterGenre(genre);
+        }
+    });
+    headerPanel.add(tabs); // masukkan ke panel header
+
+    // ======= TOMBOL LOGIN =======
+    JButton btnLogin = new JButton("Login/Daftar");
+    btnLogin.setBounds(660, 20, 120, 30); // letak tombol sejajar tab
+    btnLogin.addActionListener(e -> {
+        new loginPembeli().setVisible(true);
+        dispose();
+    });
+    headerPanel.add(btnLogin);
+
+    // ========= PANEL UTAMA =========
+    mainPanel.setBounds(0, 50, 800, 410); // di bawah header
+    add(mainPanel); // tambahkan ke frame
+
+    mainPanel.add(tabs, "Beranda");
+    mainPanel.add(panelDetBooking, "Detail Booking");
+  }
+
     
     public void loadGenreButtons(){
    

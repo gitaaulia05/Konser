@@ -16,6 +16,8 @@ import java.sql.Statement;
 import java.util.UUID;
 import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
+import com.mycompany.konser_oop2.pembeli.beranda;
+
 
 /**
  *
@@ -171,7 +173,7 @@ public class loginPembeli extends javax.swing.JFrame {
                 String passwordDb = rs.getString("password");
                 
                 if(BCrypt.checkpw(password, passwordDb)) {
-                  new beranda(id_pembeli).setVisible(true);
+                  new com.mycompany.konser_oop2.pembeli.beranda(id_pembeli).setVisible(true);
                    dispose();
                 } else {
                      JOptionPane.showMessageDialog(this, "Password salah!");
