@@ -5,6 +5,7 @@
 package com.mycompany.konser_oop2.pembeli;
 
 import com.mycompany.konser_oop2.connection;
+import com.mycompany.konser_oop2.landingPage;
 
 
 import java.awt.BorderLayout;
@@ -91,6 +92,7 @@ public class bookingKonser extends javax.swing.JFrame {
         pembayaranCombo = new javax.swing.JComboBox<>();
         pesananBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
+        logoutBtn = new javax.swing.JLabel();
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -259,6 +261,14 @@ public class bookingKonser extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        logoutBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        logoutBtn.setText("LOGOUT");
+        logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -276,7 +286,9 @@ public class bookingKonser extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(usernameBook)
-                .addGap(77, 77, 77))
+                .addGap(34, 34, 34)
+                .addComponent(logoutBtn)
+                .addGap(44, 44, 44))
             .addGroup(layout.createSequentialGroup()
                 .addGap(78, 78, 78)
                 .addComponent(panelBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -290,7 +302,8 @@ public class bookingKonser extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(berandaLbl)
                     .addComponent(jLabel3)
-                    .addComponent(usernameBook))
+                    .addComponent(usernameBook)
+                    .addComponent(logoutBtn))
                 .addGap(38, 38, 38)
                 .addComponent(panelDetailKonser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -370,6 +383,11 @@ public class bookingKonser extends javax.swing.JFrame {
         new riwayatPembeli(id_pembeli).setVisible(true);
                    dispose();  
     }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void logoutBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseClicked
+       new loginPembeli().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_logoutBtnMouseClicked
 
     public void bookingKonserMain(String konserId){
         namaKonserLbl.setText("");
@@ -492,6 +510,7 @@ public class bookingKonser extends javax.swing.JFrame {
     private javax.swing.JLabel judulLbl;
     private javax.swing.JComboBox<String> kategoriCombo;
     private javax.swing.JComboBox<String> kursiCombo;
+    private javax.swing.JLabel logoutBtn;
     private javax.swing.JLabel lokasiLbl;
     private javax.swing.JLabel namaKonserLbl;
     private javax.swing.JPanel panelBooking;

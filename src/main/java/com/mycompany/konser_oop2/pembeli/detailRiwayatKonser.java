@@ -17,6 +17,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.mycompany.konser_oop2.landingPage;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -70,12 +71,12 @@ public class detailRiwayatKonser extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
-        berandaLbl = new javax.swing.JLabel();
-        usernameBook = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        berandaLbl1 = new javax.swing.JLabel();
+        usernameBook1 = new javax.swing.JLabel();
+        logoutBtn = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         panelDetail = new javax.swing.JPanel();
         namaKonserLbl = new javax.swing.JLabel();
         kursiLbl = new javax.swing.JLabel();
@@ -83,98 +84,91 @@ public class detailRiwayatKonser extends javax.swing.JFrame {
         tanggalLbl = new javax.swing.JLabel();
         jamLbl = new javax.swing.JLabel();
         judulLbl = new javax.swing.JLabel();
-        qrLbl = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
+        qrLbl = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        berandaLbl2 = new javax.swing.JLabel();
+        usernameBook = new javax.swing.JLabel();
+        logoutBtn1 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setText("KONSERKU");
+
+        berandaLbl1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        berandaLbl1.setText("BERANDA");
+
+        usernameBook1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        usernameBook1.setText("USERNAME");
+
+        logoutBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        logoutBtn.setText("LOGOUT");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setText("RIWAYAT");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        berandaLbl.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        berandaLbl.setText("BERANDA");
-        berandaLbl.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                berandaLblMouseClicked(evt);
-            }
-        });
-
-        usernameBook.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        usernameBook.setText("USERNAME");
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("RIWAYAT");
-        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel3MouseClicked(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("KONSERKU");
-
-        panelDetail.setLayout(new java.awt.GridBagLayout());
-
         namaKonserLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         namaKonserLbl.setText("ONE OK ROCK");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(25, 50, 0, 0);
-        panelDetail.add(namaKonserLbl, gridBagConstraints);
 
         kursiLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         kursiLbl.setText("16 / regular");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 74, 32, 0);
-        panelDetail.add(kursiLbl, gridBagConstraints);
 
         lokasiLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lokasiLbl.setText("Stadion Utama GBK, Jakarta");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(4, 53, 0, 35);
-        panelDetail.add(lokasiLbl, gridBagConstraints);
 
         tanggalLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         tanggalLbl.setText("Juni 19, 2025");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 53, 0, 0);
-        panelDetail.add(tanggalLbl, gridBagConstraints);
 
         jamLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jamLbl.setText("4:00 Pm wib");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 19, 0, 35);
-        panelDetail.add(jamLbl, gridBagConstraints);
 
         judulLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         judulLbl.setText("LINKIN PARK");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        panelDetail.add(judulLbl, gridBagConstraints);
 
-        qrLbl.setText("jLabel1");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 35, 0, 0);
-        panelDetail.add(qrLbl, gridBagConstraints);
+        javax.swing.GroupLayout panelDetailLayout = new javax.swing.GroupLayout(panelDetail);
+        panelDetail.setLayout(panelDetailLayout);
+        panelDetailLayout.setHorizontalGroup(
+            panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDetailLayout.createSequentialGroup()
+                .addGroup(panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDetailLayout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addGroup(panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelDetailLayout.createSequentialGroup()
+                                .addComponent(judulLbl)
+                                .addGap(72, 72, 72)
+                                .addComponent(tanggalLbl)
+                                .addGap(19, 19, 19)
+                                .addComponent(jamLbl))
+                            .addGroup(panelDetailLayout.createSequentialGroup()
+                                .addComponent(kursiLbl)
+                                .addGap(82, 82, 82)
+                                .addComponent(lokasiLbl))))
+                    .addGroup(panelDetailLayout.createSequentialGroup()
+                        .addGap(129, 129, 129)
+                        .addComponent(namaKonserLbl)))
+                .addGap(12, 12, 12))
+        );
+        panelDetailLayout.setVerticalGroup(
+            panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDetailLayout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addComponent(namaKonserLbl)
+                .addGap(18, 18, 18)
+                .addGroup(panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(tanggalLbl)
+                        .addComponent(judulLbl))
+                    .addComponent(jamLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lokasiLbl))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDetailLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(kursiLbl)
+                .addContainerGap())
+        );
 
         backBtn.setText("Kembali");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -183,62 +177,112 @@ public class detailRiwayatKonser extends javax.swing.JFrame {
             }
         });
 
+        qrLbl.setText("jLabel1");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setText("KONSERKU");
+
+        berandaLbl2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        berandaLbl2.setText("BERANDA");
+        berandaLbl2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                berandaLbl2MouseClicked(evt);
+            }
+        });
+
+        usernameBook.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        usernameBook.setText("USERNAME");
+
+        logoutBtn1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        logoutBtn1.setText("LOGOUT");
+        logoutBtn1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoutBtn1MouseClicked(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setText("RIWAYAT");
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jLabel2)
+                .addContainerGap()
+                .addComponent(jLabel5)
                 .addGap(37, 37, 37)
-                .addComponent(berandaLbl)
+                .addComponent(berandaLbl2)
                 .addGap(31, 31, 31)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 298, Short.MAX_VALUE)
-                .addComponent(usernameBook))
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(usernameBook)
+                .addGap(34, 34, 34)
+                .addComponent(logoutBtn1)
+                .addGap(17, 17, 17))
             .addGroup(layout.createSequentialGroup()
+                .addGap(148, 148, 148)
+                .addComponent(qrLbl)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(panelDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backBtn)
+                        .addGap(303, 303, 303))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(286, 286, 286)
-                        .addComponent(backBtn)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(64, 64, 64)
+                        .addComponent(panelDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(115, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(berandaLbl)
-                    .addComponent(jLabel3)
-                    .addComponent(usernameBook))
-                .addGap(73, 73, 73)
-                .addComponent(panelDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                    .addComponent(jLabel5)
+                    .addComponent(berandaLbl2)
+                    .addComponent(jLabel6)
+                    .addComponent(usernameBook)
+                    .addComponent(logoutBtn1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(102, 102, 102)
+                        .addComponent(qrLbl)
+                        .addGap(69, 69, 69))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)))
                 .addComponent(backBtn)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void berandaLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_berandaLblMouseClicked
-        new beranda(var_pembeli).setVisible(true);
-        dispose();
-    }//GEN-LAST:event_berandaLblMouseClicked
-
-    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        new riwayatPembeli(var_pembeli).setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jLabel3MouseClicked
-
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
        new riwayatPembeli(var_pembeli).setVisible(true);
         dispose();
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void berandaLbl2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_berandaLbl2MouseClicked
+        new beranda(var_pembeli).setVisible(true);
+        dispose();
+    }//GEN-LAST:event_berandaLbl2MouseClicked
+
+    private void logoutBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtn1MouseClicked
+        new loginPembeli().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_logoutBtn1MouseClicked
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        new riwayatPembeli(var_pembeli).setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jLabel6MouseClicked
 
 
     private void detailRiwayat(String idDet, String var_pembeli){
@@ -300,17 +344,23 @@ public class detailRiwayatKonser extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JLabel berandaLbl;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel berandaLbl1;
+    private javax.swing.JLabel berandaLbl2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jamLbl;
     private javax.swing.JLabel judulLbl;
     private javax.swing.JLabel kursiLbl;
+    private javax.swing.JLabel logoutBtn;
+    private javax.swing.JLabel logoutBtn1;
     private javax.swing.JLabel lokasiLbl;
     private javax.swing.JLabel namaKonserLbl;
     private javax.swing.JPanel panelDetail;
     private javax.swing.JLabel qrLbl;
     private javax.swing.JLabel tanggalLbl;
     private javax.swing.JLabel usernameBook;
+    private javax.swing.JLabel usernameBook1;
     // End of variables declaration//GEN-END:variables
 }
