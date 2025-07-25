@@ -2,21 +2,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.konser_oop2;
-import com.mycompany.konser_oop2.admin.loginAdmin;
-import com.mycompany.konser_oop2.pembeli.loginPembeli;
+package com.mycompany.konser_oop2.admin;
+
+import com.mycompany.konser_oop2.connection;
+import com.mycompany.konser_oop2.landingPage;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import org.mindrot.jbcrypt.BCrypt;
 
-public class landingPage extends javax.swing.JFrame {
+public class loginAdmin extends javax.swing.JFrame {
 
     /**
-     * Creates new form landingPage
+     * Creates new form loginAdmin
      */
-    public landingPage() {
-         setTitle("Login - Aplikasi Konserku");
+    public loginAdmin() {
+        initComponents();
+        setTitle("Login - Aplikasi Konserku");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 500);
         setLocationRelativeTo(null);
@@ -47,7 +54,7 @@ public class landingPage extends javax.swing.JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Title
-        JLabel titleLabel = new JLabel("KonserKu", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Login Administrator", SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 23));
         titleLabel.setForeground(new Color(165, 87, 88));
         gbc.gridx = 0;
@@ -55,35 +62,91 @@ public class landingPage extends javax.swing.JFrame {
         gbc.gridwidth = 2;
         rightPanel.add(titleLabel, gbc);
 
+        // Username
+        gbc.gridwidth = 1;
+        gbc.gridy++;
+        gbc.gridx = 0;
+        JLabel emailLabel = new JLabel("Email:");
+        rightPanel.add(emailLabel, gbc);
+
+        gbc.gridx = 1;
+        JTextField emailField = new JTextField(15);
+        rightPanel.add(emailField, gbc);
+
+        // Password
+        gbc.gridx = 0;
+        gbc.gridy++;
+        JLabel passLabel = new JLabel("Password:");
+        rightPanel.add(passLabel, gbc);
+
+        gbc.gridx = 1;
+        JPasswordField passField = new JPasswordField(15);
+        rightPanel.add(passField, gbc);
 
         // Tombol Login
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
-       JButton loginPButton = new JButton("Login Pembeli");
-        rightPanel.add(loginPButton, gbc);
-        
+        JButton loginButton = new JButton("Login");
+        rightPanel.add(loginButton, gbc);
+
+        // Tombol Kembali
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
-        JButton loginAButton = new JButton("Login Administrator" );
-        rightPanel.add(loginAButton, gbc);
-
+        JButton backButton = new JButton("Kembali");
+        rightPanel.add(backButton, gbc);
+ 
         // === Gabungkan Panel Kiri dan Kanan ===
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.CENTER);
 
+          // === event back button ===       
+         backButton.addActionListener(e -> {
+             new landingPage().setVisible(true);
+             dispose();
+         });
+         
         // === Event Login Button ===
-        loginAButton.addActionListener(e -> {
-            new loginAdmin().setVisible(true);
-                   dispose();
+        loginButton.addActionListener(e -> {
+            String email = emailField.getText();
+            String password = new String(passField.getPassword());
+
+            if(email.isEmpty() || password.isEmpty()){
+           JOptionPane.showMessageDialog(this, "Semua field harus Diisi!");
+           return;
+       }
+            
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+       
+        try {
+             conn = connection.getConnection();  
+             String query = "Select * FROM administrator where email = ?";
+             pstmt = conn.prepareStatement(query);
+             pstmt.setString(1, email);
+
+             rs = pstmt.executeQuery();
+             
+             if(rs.next()){
+                String passwordDb = rs.getString("password");
+                String id_admin = rs.getString("id_admin");
+                passwordDb = passwordDb.replaceFirst("^\\$2y\\$", "\\$2a\\$");
+                 if(BCrypt.checkpw(password, passwordDb)) {
+                      new berandaAdmin(id_admin).setVisible(true);
+                    dispose();
+                 }else {
+                     JOptionPane.showMessageDialog(this, "Password salah!");
+                }
+             }else {
+                     JOptionPane.showMessageDialog(this, "Email tidak ditemukan!");
+                }         
+        } catch(SQLException er){
+             er.printStackTrace();
+        }  
         });
-        
-        loginPButton.addActionListener(e -> {
-            new loginPembeli().setVisible(true);
-                   dispose();
-        });
-        
     }
 
     /**
@@ -128,20 +191,20 @@ public class landingPage extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(landingPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(loginAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(landingPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(loginAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(landingPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(loginAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(landingPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(loginAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new landingPage().setVisible(true);
+                new loginAdmin().setVisible(true);
             }
         });
     }

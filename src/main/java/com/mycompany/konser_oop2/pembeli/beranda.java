@@ -18,7 +18,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import com.mycompany.konser_oop2.pembeli.loginPembeli; // Diimpor oleh ind
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 
 public class beranda extends javax.swing.JFrame {
@@ -39,7 +41,7 @@ public class beranda extends javax.swing.JFrame {
         loadGenreButtons();
     }
     
-  public void initUI() {
+ public void initUI() {
     try {
         UIManager.setLookAndFeel(new FlatLightLaf());
     } catch (Exception e) {
@@ -50,20 +52,25 @@ public class beranda extends javax.swing.JFrame {
     setSize(800, 500);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
-    setLayout(null); // penting agar bisa atur posisi manual dengan setBounds
+    getContentPane().setBackground(Color.WHITE);
+    setLayout(new BorderLayout()); // biar pakai NORTH, CENTER, dll
 
+    // Navbar
+    navbar navbar = new navbar(id_pembeli);
+    add(navbar, BorderLayout.NORTH); // ini akan tampil di atas
+
+    // Panel utama
     cardLayout = new CardLayout();
     mainPanel = new JPanel(cardLayout);
+    mainPanel.setBackground(Color.WHITE);
+
     panelDetBooking = new JPanel();
+    panelDetBooking.setBackground(Color.WHITE);
 
-    // ========= PANEL HEADER ATAS (tabs + tombol Login) =========
-    JPanel headerPanel = new JPanel(null); // pakai null layout
-    headerPanel.setBounds(0, 0, 800, 50); // lebar penuh, tinggi 50
-    add(headerPanel); // tambahkan ke frame
-
-    // ======= TABS (Rock / Pop) =======
+    // Tabs
     tabs = new JTabbedPane();
-    tabs.setBounds(10, 10, 600, 30); // letak tab (kiri)
+    tabs.setBackground(Color.WHITE); 
+    tabs.setOpaque(true);
     tabs.addChangeListener(e -> {
         int selectedIndex = tabs.getSelectedIndex();
         if (selectedIndex != -1) {
@@ -71,24 +78,76 @@ public class beranda extends javax.swing.JFrame {
             filterGenre(genre);
         }
     });
-    headerPanel.add(tabs); // masukkan ke panel header
 
-    // ======= TOMBOL LOGIN =======
-    JButton btnLogin = new JButton("Login/Daftar");
-    btnLogin.setBounds(660, 20, 120, 30); // letak tombol sejajar tab
-    btnLogin.addActionListener(e -> {
-        new loginPembeli().setVisible(true);
-        dispose();
-    });
-    headerPanel.add(btnLogin);
-
-    // ========= PANEL UTAMA =========
-    mainPanel.setBounds(0, 50, 800, 410); // di bawah header
-    add(mainPanel); // tambahkan ke frame
-
+    // Tambah ke main panel
     mainPanel.add(tabs, "Beranda");
     mainPanel.add(panelDetBooking, "Detail Booking");
-  }
+
+    // Tambah ke tampilan utama
+    add(mainPanel, BorderLayout.CENTER);
+}
+
+  // Buat metode bantu untuk bikin label navigasi
+ private JLabel createNavLabel(String text) {
+    JLabel label = new JLabel(text);
+    label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    label.setForeground(Color.BLACK);
+    label.setFont(new Font("Arial", Font.BOLD, 14));
+
+    // Tambahkan efek klik
+    label.addMouseListener(new MouseAdapter() {
+        public void mouseClicked(MouseEvent e) {
+            System.out.println("Klik: " + text);
+
+            // Contoh pindah halaman:
+            switch (text) {
+                case "BERANDA":
+                    cardLayout.show(mainPanel, "Beranda");
+                    break;
+                case "KONSERKU":
+                     new riwayatPembeli(id_pembeli).setVisible(true);
+                   dispose();  
+                    break;
+                case "RIWAYAT":
+                     new loginPembeli().setVisible(true);
+                    dispose();
+                    break;
+                case "LOGOUT":
+                    dispose();
+                    new loginPembeli().setVisible(true);
+                    break;
+            }
+        }
+
+        public void mouseExited(MouseEvent e) {
+            label.setForeground(Color.BLACK);
+        }
+    });
+
+    return label;
+}
+
+    private String getNamaPembeli() {
+        String nama = "USERNAME"; // default kalau gagal ambil
+        try {
+            Connection conn = connection.getConnection(); // asumsi kamu punya class connection.java
+            String query = "SELECT nama FROM pembeli WHERE id_pembeli = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, id_pembeli); // pastikan variabel id_pembeli tersedia di class ini
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                nama = rs.getString("nama");
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nama;
+    }
 
     
     public void loadGenreButtons(){
@@ -102,11 +161,15 @@ public class beranda extends javax.swing.JFrame {
             while(rs.next()) {
                 String genre = rs.getString("genre_konser");
                 JPanel panelJenis = new JPanel();
+              
                 panelJenis.setLayout(new BoxLayout(panelJenis, BoxLayout.Y_AXIS));
-                    panelJenis.setPreferredSize(new Dimension(700, 500));
-                    
+                panelJenis.setPreferredSize(new Dimension(700, 500));
+                panelJenis.setBackground(Color.WHITE);
+                  
                 JScrollPane scroll = new JScrollPane(panelJenis);
                 tabs.addTab(genre, scroll);
+                scroll.getViewport().setBackground(Color.WHITE); // ✅
+                scroll.setBackground(Color.WHITE);
             }
         }catch(Exception e){
              JOptionPane.showMessageDialog(null, "gagal load genre");
@@ -117,6 +180,7 @@ public class beranda extends javax.swing.JFrame {
         try {
          
             JScrollPane selectedScroll = (JScrollPane) tabs.getSelectedComponent();
+            
             JPanel currentPanel = (JPanel) selectedScroll.getViewport().getView();
             currentPanel.removeAll();
             
@@ -126,7 +190,9 @@ public class beranda extends javax.swing.JFrame {
             Statement stmt = conn.createStatement();
             String query = "Select k.nama_konser, k.lokasi, k.jam, k.tanggal, k.id_konser " + 
                     "from konser k " + "JOIN genre_konser g on k.id_genre_konser = g.id_genre "
-                    + "where g.genre_konser = ?";
+                    + "JOIN detail_kategori_tiket dk on k.id_konser = dk.id_konser "
+                    + "where g.genre_konser = ? " + 
+                    "GROUP BY k.id_konser, k.nama_konser, k.lokasi, k.jam, k.tanggal ";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, genre);
             ResultSet rs = ps.executeQuery();
@@ -182,10 +248,10 @@ public class beranda extends javax.swing.JFrame {
                    JButton clickedButton = (JButton) e.getSource();
                    String konserId = (String) clickedButton.getClientProperty("id");
                    if(id_pembeli == null || id_pembeli.isEmpty()  ){
-                        new loginPembeli().setVisible(true);
+                        new loginPembeli ().setVisible(true);
                         setVisible(false);
                    } else {
-                   new bookingKonser(konserId, id_pembeli).setVisible(true);
+                   new pesanKonser(konserId, id_pembeli).setVisible(true);
                     dispose();
                    }
                } 
@@ -194,12 +260,16 @@ public class beranda extends javax.swing.JFrame {
             rightPanel.add(lblJam);
             rightPanel.add(lblTanggal);
             rightPanel.add(btnRsvp);
-
+            
+        card.setMaximumSize(new Dimension(750, 80)); // batas maksimal
+        rightPanel.setPreferredSize(new Dimension(200, 60)); // jaga agar tidak terlalu besar
+       
         card.add(leftPanel, BorderLayout.WEST);
         card.add(rightPanel, BorderLayout.EAST);
 
-        currentPanel.add(card);
         currentPanel.add(Box.createVerticalStrut(15)); 
+        currentPanel.add(card);
+
     }
         } catch(Exception e){
               e.printStackTrace();

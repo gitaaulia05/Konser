@@ -17,7 +17,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.mycompany.konser_oop2.landingPage;
+
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -33,6 +33,7 @@ public class detailRiwayatKonser extends javax.swing.JFrame {
     
     public detailRiwayatKonser(String id_det_tiket, String id_pembeli) {
         initComponents();
+        setTitle("Detail Riwayat Konser");
         panelDetail.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         this.var_pembeli = id_pembeli;
         this.id_det_tiket = id_det_tiket;

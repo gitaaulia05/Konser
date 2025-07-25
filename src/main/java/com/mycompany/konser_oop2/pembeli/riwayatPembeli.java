@@ -29,6 +29,7 @@ public class riwayatPembeli extends javax.swing.JFrame {
     public riwayatPembeli(String id_pembeli) {
         this.var_pembeli = id_pembeli;
         initComponents();
+        setTitle("Riwayat Pembeli");
         containerRiwayat.setLayout(new BoxLayout(containerRiwayat, BoxLayout.Y_AXIS));
       
         if(var_pembeli == null || var_pembeli.isEmpty()){

@@ -5,9 +5,6 @@
 package com.mycompany.konser_oop2.pembeli;
 
 import com.mycompany.konser_oop2.connection;
-import com.mycompany.konser_oop2.landingPage;
-
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -28,7 +25,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import javax.swing.JOptionPane;
@@ -40,13 +39,20 @@ public class bookingKonser extends javax.swing.JFrame {
     private String id_pembeli;
     private String selectedId;  // id_det_tiket
     private String id_konserBook;
+    private String id_bank;
     
     private int kursiBooking;
     private String metodePembayaran;
     private String tanggal_transaksi;
+    
+    private Map<String, String> linkBank = new HashMap<>();
+    private Map<String, String> linkKategori = new HashMap<>();
+     
 
     public bookingKonser(String konserId, String id_pembeli) {
         initComponents();
+        setTitle("Pesan Tiket Konser");
+        pembayaran();
         bookingKonserMain(konserId);
         this.id_pembeli = id_pembeli;
         try {
@@ -204,7 +210,6 @@ public class bookingKonser extends javax.swing.JFrame {
             }
         });
 
-        pembayaranCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mandiri", "BCA", "BRI" }));
         pembayaranCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pembayaranComboActionPerformed(evt);
@@ -323,21 +328,55 @@ public class bookingKonser extends javax.swing.JFrame {
     }//GEN-LAST:event_kursiComboActionPerformed
 
     private void pembayaranComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pembayaranComboActionPerformed
-        // TODO add your handling code here:
+       String selectedName = (String) pembayaranCombo.getSelectedItem();
+                if(linkBank.containsKey(selectedName)){
+                    String selectedId = linkBank.get(selectedName);
+                    id_bank = selectedId;
+                }
     }//GEN-LAST:event_pembayaranComboActionPerformed
 
+    private void pembayaran() {
+         Connection conn = connection.getConnection();
+         String query ="SELECT * from bank";
+         pembayaranCombo.removeAllItems();
+         linkBank.clear();
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                String kategori = rs.getString("nama_bank");
+                String id_genre = rs.getString("id_bank");
+                pembayaranCombo.addItem(kategori);
+                linkBank.put(kategori, id_genre);
+            }    
+            
+            if (pembayaranCombo.getItemCount()>0){
+                pembayaranCombo.setSelectedIndex(0);
+                 String selectedName = (String) pembayaranCombo.getSelectedItem();
+                if(linkBank.containsKey(selectedName)){
+                    String selectedId = linkBank.get(selectedName);
+                    id_bank = selectedId;
+                }
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        }catch(Exception e){
+              e.printStackTrace();
+         }
+    }
+    
     private void pesananBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesananBtnActionPerformed
         id_riwayat = UUID.randomUUID().toString();
-      
        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
        tanggal_transaksi = LocalDateTime.now().format(formatter);
-       String metodePembayaran = "BCA";
        
        try {
            Connection conn = connection.getConnection();
            Statement stmt = conn.createStatement();
            String queryIrp = "INSERT INTO riwayat_pembeli " + 
-                   "(id_riwayat, id_pembeli, id_det_tiket, id_konser, kursi, metode_pembayaran) " +
+                   "(id_riwayat, id_pembeli, id_det_tiket, id_konser, id_bank kursi) " +
                    "VALUES (?, ?, ?, ?, ?, ?)";
            PreparedStatement irp = conn.prepareStatement(queryIrp);
            
@@ -345,10 +384,10 @@ public class bookingKonser extends javax.swing.JFrame {
            irp.setString(2, id_pembeli);
            irp.setString(3, selectedId);
            irp.setString(4, id_konserBook);
-           irp.setInt(5, kursiBooking);
-           irp.setString(6, metodePembayaran);
-          // irp.setString(7, tanggal_transaksi);
+           irp.setString(5, id_bank);
+           irp.setInt(6, kursiBooking);
            
+         
            int rowsAffected = irp.executeUpdate();
            if(rowsAffected > 0){
                 new riwayatPembeli(id_pembeli).setVisible(true);
@@ -395,7 +434,6 @@ public class bookingKonser extends javax.swing.JFrame {
         tanggalLbl.setText("");
         jamLbl.setText("");
         lokasiLbl.setText("");
-        
         
         kategoriCombo.removeAllItems();
         kursiCombo.removeAllItems();

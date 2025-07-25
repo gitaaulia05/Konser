@@ -1,0 +1,157 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+package com.mycompany.konser_oop2.pembeli;
+
+import com.mycompany.konser_oop2.connection;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import com.mycompany.konser_oop2.landingPage;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class navbar extends javax.swing.JPanel {
+
+private String id_pembeli;
+    public navbar(String id_pembeli) {
+       this.id_pembeli = id_pembeli;
+            initCustomNavbar();
+    }
+    
+    
+    private void initCustomNavbar() {
+        setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
+        setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        // Panel kiri: Username + Logout
+        JPanel leftPanel = new JPanel();
+        leftPanel.setOpaque(false);
+        leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        if(id_pembeli != null){
+             leftPanel.add(makeNavItem(getNamaPembeli()));
+             leftPanel.add(makeNavItem("Logout"));
+        } else {
+            leftPanel.add(makeNavItem("Login"));
+        }
+       
+        // Panel kanan: Konserku, Beranda, Riwayat
+        JPanel rightPanel = new JPanel();
+        rightPanel.setOpaque(false);
+        rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        rightPanel.add(makeNavItem("Konserku"));
+        rightPanel.add(makeNavItem("Beranda"));
+        rightPanel.add(makeNavItem("Riwayat"));
+
+        add(leftPanel, BorderLayout.WEST);
+        add(rightPanel, BorderLayout.EAST);
+    }
+
+    private String getNamaPembeli() {
+        String nama = "USERNAME";
+        try {
+            Connection conn = connection.getConnection();
+            String query = "SELECT nama FROM pembeli WHERE id_pembeli = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, id_pembeli);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                nama = rs.getString("nama");
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nama;
+    }
+
+    private JPanel makeNavItem(String text) {
+        Color hoverColor = new Color(0xA55758);
+        Color bgColor = Color.WHITE;
+        Font font = new Font("SansSerif", Font.BOLD, 16);
+
+        JLabel label = new JLabel(text);
+        label.setFont(font);
+        label.setForeground(Color.BLACK);
+        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        label.setOpaque(false);
+        
+        JPanel paddedPanel = new JPanel();
+        paddedPanel.setBackground(bgColor);
+        paddedPanel.setOpaque(true);
+        paddedPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        paddedPanel.setLayout(new BorderLayout());
+        paddedPanel.add(label);
+
+        label.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                label.setForeground(hoverColor);
+            }
+            public void mouseExited(MouseEvent e) {
+                label.setForeground(Color.BLACK);
+            }
+            
+            public void mouseClicked(MouseEvent e) {
+                if (text.equalsIgnoreCase("Logout")) {
+                    new landingPage().setVisible(true);
+                    Window window = SwingUtilities.getWindowAncestor(navbar.this);
+                    window.dispose();
+                } else if(text.equalsIgnoreCase("Beranda")){
+                    new beranda(id_pembeli).setVisible(true);
+                    Window window = SwingUtilities.getWindowAncestor(navbar.this);
+                    window.dispose();
+                } else if(text.equalsIgnoreCase("Riwayat")){
+                    new riwayatPembeli(id_pembeli).setVisible(true);
+                    Window window = SwingUtilities.getWindowAncestor(navbar.this);
+                    window.dispose();
+                } else if(text.equalsIgnoreCase("Konserku")){
+                    new riwayatPembeli(id_pembeli).setVisible(true);
+                    Window window = SwingUtilities.getWindowAncestor(navbar.this);
+                    window.dispose();
+                } else if (text.equalsIgnoreCase("Login")){
+                    new landingPage().setVisible(true);
+                    Window window = SwingUtilities.getWindowAncestor(navbar.this);
+                    window.dispose();
+                }
+            }
+        });
+
+        return paddedPanel;
+    }
+
+
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
+}
