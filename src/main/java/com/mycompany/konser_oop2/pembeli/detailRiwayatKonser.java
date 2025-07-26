@@ -5,62 +5,183 @@
 package com.mycompany.konser_oop2.pembeli;
 
 import com.mycompany.konser_oop2.connection;
-import java.awt.Color;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.BorderFactory;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-
-
-import javax.swing.*;
-import java.awt.image.BufferedImage;
-
-/**
- *
- * @author Gita Aulia Hafid
- */
 public class detailRiwayatKonser extends javax.swing.JFrame {
-    
+
+
     private String var_pembeli;
     private String id_det_tiket;
+
+    private JLabel namaKonserLbl;
+    private JLabel namaBandLbl;
+    private JLabel tanggalLbl;
+    private JLabel jamLbl;
+    private JLabel lokasiLbl;
+    private JLabel kategoriLbl;
+    private JLabel qrLbl;
+    private JLabel metodePemLbl;
+    private JLabel tanggalTransaksiLbl;
     
     public detailRiwayatKonser(String id_det_tiket, String id_pembeli) {
-        initComponents();
-        setTitle("Detail Riwayat Konser");
-        panelDetail.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         this.var_pembeli = id_pembeli;
         this.id_det_tiket = id_det_tiket;
-        
-            if(var_pembeli == null || var_pembeli.isEmpty() || id_det_tiket.isEmpty()){
-                 new beranda(id_pembeli).setVisible(true);
-                dispose();
-            } else {
-                 try {
-                 Connection conn = connection.getConnection(); // bikin koneksi baru
-                String query = "SELECT nama FROM pembeli WHERE id_pembeli = ?";
-                PreparedStatement ps = conn.prepareStatement(query);
-                ps.setString(1, id_pembeli);
-                ResultSet rs = ps.executeQuery();
-               if (rs.next()) {
-            String namaPembeli = rs.getString("nama");
-            usernameBook.setText(namaPembeli);
-            usernameBook.setText(namaPembeli); // tampilkan nama di GUI
-            
+
+        if (var_pembeli == null || var_pembeli.isEmpty() || id_det_tiket == null || id_det_tiket.isEmpty()) {
+            new beranda(id_pembeli).setVisible(true);
+            dispose();
+            return;
         }
-       detailRiwayat(id_det_tiket, var_pembeli);
-        rs.close();
-        ps.close();
-        conn.close();
-            }catch(SQLException e){
-                e.printStackTrace();
+
+        initUI();
+        loadDetail();
+        setVisible(true);
+    }
+
+    private void initUI() {
+        try {
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setTitle("Detail Riwayat Konser");
+        setSize(800, 500);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.WHITE);
+
+        // === Navbar ===
+        navbar navbar = new navbar(var_pembeli);
+        add(navbar, BorderLayout.NORTH);
+
+        // === Panel Detail ===
+        JPanel  infoPanel = new JPanel();
+         infoPanel.setLayout(new BoxLayout( infoPanel, BoxLayout.Y_AXIS));
+         infoPanel.setBackground(Color.WHITE);
+         infoPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        
+          // Panel kiri (info teks)
+        JPanel detailPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBackground(Color.WHITE);
+
+        namaKonserLbl = createLabel("", 18, Font.BOLD);
+        namaBandLbl = createLabel("", 16, Font.PLAIN);
+        tanggalLbl = createLabel("", 14, Font.PLAIN);
+        jamLbl = createLabel("", 14, Font.PLAIN);
+        lokasiLbl = createLabel("", 14, Font.PLAIN);
+        kategoriLbl = createLabel("", 14, Font.PLAIN);
+        metodePemLbl = createLabel("", 14, Font.PLAIN);
+        tanggalTransaksiLbl =createLabel("", 14, Font.PLAIN);
+       
+         infoPanel.add(namaKonserLbl);
+         infoPanel.add(Box.createVerticalStrut(10));
+         infoPanel.add(namaBandLbl);
+         infoPanel.add(Box.createVerticalStrut(10));
+         infoPanel.add(tanggalLbl);
+         infoPanel.add(jamLbl);
+         infoPanel.add(lokasiLbl);
+         infoPanel.add(kategoriLbl);
+         infoPanel.add(Box.createVerticalStrut(20));
+         infoPanel.add(metodePemLbl);
+         infoPanel.add(Box.createVerticalStrut(20));
+         infoPanel.add(tanggalTransaksiLbl);
+         infoPanel.add(Box.createVerticalStrut(20));
+         
+          // Panel kanan (QR Code)
+            JPanel qrPanel = new JPanel();
+            qrPanel.setBackground(Color.WHITE);
+            qrLbl = new JLabel();
+            qrPanel.add(qrLbl);
+
+        // Gabungkan info dan QR code
+        detailPanel.add(infoPanel, BorderLayout.CENTER);
+        detailPanel.add(qrPanel, BorderLayout.EAST);
+
+        add(detailPanel, BorderLayout.CENTER);
+
+        // === Tombol Kembali ===
+        JButton backBtn = new JButton("Kembali");
+        backBtn.addActionListener(e -> {
+            new riwayatPembeli(var_pembeli).setVisible(true);
+            dispose();
+        });
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setBackground(Color.WHITE);
+        bottomPanel.add(backBtn);
+        add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    private JLabel createLabel(String text, int size, int style) {
+        JLabel lbl = new JLabel(text);
+        lbl.setFont(new Font("Segoe UI", style, size));
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return lbl;
+    }
+
+    private void loadDetail() {
+        try {
+            Connection conn = connection.getConnection();
+            String query = "SELECT rp.id_det_tiket, rp.kursi, dk.harga_tiket, kt.kategori_konser, rp.tanggal_transaksi, " +
+                    "k.nama_band, k.nama_konser, k.lokasi, k.jam, k.tanggal, b.nama_bank " +
+                    "FROM riwayat_pembeli rp " +
+                    "JOIN bank b on rp.id_bank = b.id_bank " + 
+                    "JOIN detail_kategori_tiket dk ON rp.id_det_tiket = dk.id_det_tiket " +
+                    "JOIN kategori_tiket kt ON dk.id_kategori_tiket = kt.id_kategori_tiket " +
+                    "JOIN konser k ON dk.id_konser = k.id_konser " +
+                    "WHERE rp.id_pembeli = ? AND rp.id_det_tiket = ?";
+
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, var_pembeli);
+            ps.setString(2, id_det_tiket);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                namaKonserLbl.setText("Nama Konser: " + rs.getString("nama_konser"));
+                namaBandLbl.setText("Band: " + rs.getString("nama_band"));
+                tanggalLbl.setText("Tanggal: " + rs.getString("tanggal"));
+                jamLbl.setText("Jam: " + rs.getString("jam"));
+                lokasiLbl.setText("Lokasi: " + rs.getString("lokasi"));
+                kategoriLbl.setText("Kategori/Kursi: " + rs.getString("kategori_konser") + " / " + rs.getString("kursi"));
+                metodePemLbl.setText("Metode Pembayaran: " + rs.getString("nama_bank"));
+                tanggalTransaksiLbl.setText("Tanggal Transaksi: " + rs.getString("tanggal_transaksi"));
+                generateQRCode(id_det_tiket, qrLbl);
             }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void generateQRCode(String data, JLabel label) {
+        int width = 200;
+        int height = 200;
+        QRCodeWriter qrWriter = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = qrWriter.encode(data, BarcodeFormat.QR_CODE, width, height);
+            BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+            label.setIcon(new ImageIcon(qrImage));
+        } catch (WriterException e) {
+            e.printStackTrace();
         }
     }
 
@@ -73,295 +194,24 @@ public class detailRiwayatKonser extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        berandaLbl1 = new javax.swing.JLabel();
-        usernameBook1 = new javax.swing.JLabel();
-        logoutBtn = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        panelDetail = new javax.swing.JPanel();
-        namaKonserLbl = new javax.swing.JLabel();
-        kursiLbl = new javax.swing.JLabel();
-        lokasiLbl = new javax.swing.JLabel();
-        tanggalLbl = new javax.swing.JLabel();
-        jamLbl = new javax.swing.JLabel();
-        judulLbl = new javax.swing.JLabel();
-        backBtn = new javax.swing.JButton();
-        qrLbl = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        berandaLbl2 = new javax.swing.JLabel();
-        usernameBook = new javax.swing.JLabel();
-        logoutBtn1 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("KONSERKU");
-
-        berandaLbl1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        berandaLbl1.setText("BERANDA");
-
-        usernameBook1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        usernameBook1.setText("USERNAME");
-
-        logoutBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        logoutBtn.setText("LOGOUT");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setText("RIWAYAT");
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        namaKonserLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        namaKonserLbl.setText("ONE OK ROCK");
-
-        kursiLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        kursiLbl.setText("16 / regular");
-
-        lokasiLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lokasiLbl.setText("Stadion Utama GBK, Jakarta");
-
-        tanggalLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        tanggalLbl.setText("Juni 19, 2025");
-
-        jamLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jamLbl.setText("4:00 Pm wib");
-
-        judulLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        judulLbl.setText("LINKIN PARK");
-
-        javax.swing.GroupLayout panelDetailLayout = new javax.swing.GroupLayout(panelDetail);
-        panelDetail.setLayout(panelDetailLayout);
-        panelDetailLayout.setHorizontalGroup(
-            panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDetailLayout.createSequentialGroup()
-                .addGroup(panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelDetailLayout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addGroup(panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelDetailLayout.createSequentialGroup()
-                                .addComponent(judulLbl)
-                                .addGap(72, 72, 72)
-                                .addComponent(tanggalLbl)
-                                .addGap(19, 19, 19)
-                                .addComponent(jamLbl))
-                            .addGroup(panelDetailLayout.createSequentialGroup()
-                                .addComponent(kursiLbl)
-                                .addGap(82, 82, 82)
-                                .addComponent(lokasiLbl))))
-                    .addGroup(panelDetailLayout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addComponent(namaKonserLbl)))
-                .addGap(12, 12, 12))
-        );
-        panelDetailLayout.setVerticalGroup(
-            panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDetailLayout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addComponent(namaKonserLbl)
-                .addGap(18, 18, 18)
-                .addGroup(panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tanggalLbl)
-                        .addComponent(judulLbl))
-                    .addComponent(jamLbl))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lokasiLbl))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDetailLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(kursiLbl)
-                .addContainerGap())
-        );
-
-        backBtn.setText("Kembali");
-        backBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backBtnActionPerformed(evt);
-            }
-        });
-
-        qrLbl.setText("jLabel1");
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setText("KONSERKU");
-
-        berandaLbl2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        berandaLbl2.setText("BERANDA");
-        berandaLbl2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                berandaLbl2MouseClicked(evt);
-            }
-        });
-
-        usernameBook.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        usernameBook.setText("USERNAME");
-
-        logoutBtn1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        logoutBtn1.setText("LOGOUT");
-        logoutBtn1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                logoutBtn1MouseClicked(evt);
-            }
-        });
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setText("RIWAYAT");
-        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel6MouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addGap(37, 37, 37)
-                .addComponent(berandaLbl2)
-                .addGap(31, 31, 31)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(usernameBook)
-                .addGap(34, 34, 34)
-                .addComponent(logoutBtn1)
-                .addGap(17, 17, 17))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(148, 148, 148)
-                .addComponent(qrLbl)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(backBtn)
-                        .addGap(303, 303, 303))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addComponent(panelDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(115, Short.MAX_VALUE))))
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(berandaLbl2)
-                    .addComponent(jLabel6)
-                    .addComponent(usernameBook)
-                    .addComponent(logoutBtn1))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addComponent(qrLbl)
-                        .addGap(69, 69, 69))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(panelDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(44, 44, 44)))
-                .addComponent(backBtn)
-                .addContainerGap(96, Short.MAX_VALUE))
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-       new riwayatPembeli(var_pembeli).setVisible(true);
-        dispose();
-    }//GEN-LAST:event_backBtnActionPerformed
 
-    private void berandaLbl2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_berandaLbl2MouseClicked
-        new beranda(var_pembeli).setVisible(true);
-        dispose();
-    }//GEN-LAST:event_berandaLbl2MouseClicked
-
-    private void logoutBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtn1MouseClicked
-        new loginPembeli().setVisible(true);
-        dispose();
-    }//GEN-LAST:event_logoutBtn1MouseClicked
-
-    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        new riwayatPembeli(var_pembeli).setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jLabel6MouseClicked
-
-
-    private void detailRiwayat(String idDet, String var_pembeli){
-        namaKonserLbl.setText("");
-        judulLbl.setText("");
-        tanggalLbl.setText("");
-        jamLbl.setText("");
-        lokasiLbl.setText("");
-        kursiLbl.setText("");
-        
-         try {
-              Connection conn = connection.getConnection();
-            String query = "SELECT rp.id_det_tiket, rp.kursi, rp.tanggal_transaksi, rp.metode_pembayaran, dk.harga_tiket, kt.kategori_konser, k.nama_band, k.nama_konser, k.lokasi, k.jam, k.tanggal " +
-                    "FROM riwayat_pembeli rp " + "JOIN detail_kategori_tiket dk on rp.id_det_tiket = dk.id_det_tiket " 
-                    + "JOIN kategori_tiket kt on dk.id_kategori_tiket = kt.id_kategori_tiket "
-                    + "JOIN konser k on dk.id_konser = k.id_konser "                 
-                    + "where rp.id_pembeli = ? ";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, var_pembeli);
-            ResultSet rs = ps.executeQuery();
-            
-              while(rs.next()){
-                String namaKonser = rs.getString("nama_konser");
-                String namaBand = rs.getString("nama_band");
-                String tanggal = rs.getString("tanggal");
-                String jam = rs.getString("jam");
-                String lokasi = rs.getString("lokasi");
-                String kursi = rs.getString("kursi");
-                String kategori = rs.getString("kategori_konser");
-                String id_detRiwayat = rs.getString("id_det_tiket");
-                tampilkanQr(id_detRiwayat, qrLbl);
-                namaKonserLbl.setText(namaBand);
-                judulLbl.setText(namaKonser);
-                tanggalLbl.setText(tanggal);
-                jamLbl.setText(jam);
-                lokasiLbl.setText(lokasi);
-                kursiLbl.setText(kategori + "/" + kursi);
-                
-              }
-         } catch ( SQLException e){
-              e.printStackTrace();
-         }
-    }
-    
-    public void tampilkanQr(String data, JLabel label){
-        label.setText("");
-        int width = 200;
-        int height = 200;
-        
-        QRCodeWriter qrWriter = new QRCodeWriter();
-        try {
-            BitMatrix bitMatrix = qrWriter.encode(data, BarcodeFormat.QR_CODE, width, height);
-            BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
-            label.setIcon(new ImageIcon(qrImage));
-        } catch(WriterException e){
-            e.printStackTrace();
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton backBtn;
-    private javax.swing.JLabel berandaLbl1;
-    private javax.swing.JLabel berandaLbl2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jamLbl;
-    private javax.swing.JLabel judulLbl;
-    private javax.swing.JLabel kursiLbl;
-    private javax.swing.JLabel logoutBtn;
-    private javax.swing.JLabel logoutBtn1;
-    private javax.swing.JLabel lokasiLbl;
-    private javax.swing.JLabel namaKonserLbl;
-    private javax.swing.JPanel panelDetail;
-    private javax.swing.JLabel qrLbl;
-    private javax.swing.JLabel tanggalLbl;
-    private javax.swing.JLabel usernameBook;
-    private javax.swing.JLabel usernameBook1;
     // End of variables declaration//GEN-END:variables
 }

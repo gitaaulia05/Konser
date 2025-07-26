@@ -108,6 +108,7 @@ public class detailKonser extends javax.swing.JFrame {
 
     
      private JPanel createDetailCard() {
+
         JPanel card = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {

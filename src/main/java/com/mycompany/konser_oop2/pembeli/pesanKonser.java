@@ -14,35 +14,42 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.UUID;
 
 public class pesanKonser extends javax.swing.JFrame {
     
      // Variabel untuk database
     private String id_riwayat;
     private String id_pembeli;
-    private String selectedId;  // id_det_tiket
-    private String id_konserBook;
+    private String selectedId;  // id_kategori
+    private String id_det_tiket;
     private String id_bank;
     private String id_konser;
-    
     private int kursiBooking;
+    
     private String metodePembayaran;
     private String tanggal_transaksi;
 
     
-    private Map<String, String> linkBank = new HashMap<>();
-    private Map<String, String> listKategori = new HashMap<>();
-    private Map<String, String> listKursi = new HashMap<>();
+    private Map<String, String> listBank = new HashMap<>();
     
-       JComboBox<String> kursiKonserCombo ;
+    private Map<String, String> listKategori = new HashMap<>();
+    private List<Integer> listKursi = new ArrayList<>();
+    
+    JComboBox<String> kursiKonserCombo ;
+    JComboBox<String> pilihanPembayaranCombo;
+    
    public pesanKonser(String konserId, String Pembeli) {
     this.id_konser = konserId;
     this.id_pembeli = Pembeli;     
     getKategoriKonser();
+    getBank();
     
     setTitle("Detail Konser");
     setSize(800, 400);
@@ -132,7 +139,7 @@ public class pesanKonser extends javax.swing.JFrame {
             ps.setString(1, id_konser);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                id_konserBook = rs.getString("id_konser");
+                id_konser = rs.getString("id_konser");
                 String nama_konser = rs.getString("nama_konser");
                 String nama_band = rs.getString("nama_band");
                 String tanggal = rs.getString("tanggal");
@@ -166,16 +173,53 @@ public class pesanKonser extends javax.swing.JFrame {
       JPanel kiriPanel = new JPanel();
       kiriPanel.setLayout(new GridLayout(3, 1, 10, 10));
       kiriPanel.setBackground(Color.WHITE);
+      
+      // konversi list kursi ke string
+      String[] kursiItems = listKursi.stream()
+                                      .map(Object::toString)
+                                      .toArray(String[]::new);
     
       JComboBox<String> kategoriKonserCombo = new JComboBox<>(listKategori.keySet().toArray(new String[0]));
-      kursiKonserCombo = new JComboBox<>(listKursi.keySet().toArray(new String[0]));
-      JComboBox<String> pilihanPembayaranCombo = new JComboBox<>(new String[]{"Transfer Bank", "OVO", "Gopay"});
-
+      kursiKonserCombo = new JComboBox<>(kursiItems);
+      pilihanPembayaranCombo = new JComboBox<>(listBank.keySet().toArray(new String[0]));
+      
+      // set default id
+      kategoriKonserCombo.setSelectedIndex(0);
+      pilihanPembayaranCombo.setSelectedIndex(0);
+      
+     
+      // Evenet klik Pembayaran 
+      pilihanPembayaranCombo.addActionListener(e -> {
+          String selectedBank = (String) pilihanPembayaranCombo.getSelectedItem();
+          bank(selectedBank); // Fungsi yang dipanggil saat diklik
+      });
+      
       // === Event Klik kategori konser ===
       kategoriKonserCombo.addActionListener(e -> {
           String selectedKategori = (String) kategoriKonserCombo.getSelectedItem();
           kategoriDipilih(selectedKategori); // Fungsi yang dipanggil saat diklik
       });
+      
+       
+        // Set default kategori dan bank
+  if (!listKategori.isEmpty()) {
+      String firstKategori = listKategori.keySet().iterator().next();
+      kategoriKonserCombo.setSelectedItem(firstKategori);
+      kategoriDipilih(firstKategori); // Panggil agar kursi terisi
+      id_det_tiket = listKategori.get(firstKategori);
+  }
+
+  if (!listBank.isEmpty()) {
+      String firstBank = listBank.keySet().iterator().next();
+      pilihanPembayaranCombo.setSelectedItem(firstBank);
+      id_bank = listBank.get(firstBank);
+  }
+
+  // Ambil kursi pertama setelah kategori dipilih
+  if (!listKursi.isEmpty()) {
+      kursiBooking = listKursi.get(0); // integer langsung
+  }
+
 
       kiriPanel.add(kategoriKonserCombo);
       kiriPanel.add(kursiKonserCombo);
@@ -199,11 +243,15 @@ public class pesanKonser extends javax.swing.JFrame {
       pesanBtn.setBackground(Color.RED);
       pesanBtn.setForeground(Color.WHITE);
       pesanBtn.setFocusPainted(false);
+      
+      pesanBtn.addActionListener(e -> {
+          simpanData(id_pembeli, id_det_tiket, id_bank, id_konser, kursiBooking) ;
+      });
 
       // Panel untuk tombol + label kembali
       JPanel bawahPanel = new JPanel(new BorderLayout());
-      bawahPanel.setBackground(Color.WHITE);
-      bawahPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+      
+      bawahPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0)); 
       bawahPanel.add(pesanBtn, BorderLayout.NORTH);
 
       // Label Kembali
@@ -247,49 +295,131 @@ public class pesanKonser extends javax.swing.JFrame {
        ResultSet br = bo.executeQuery();
        
         while(br.next()){
-            String idKategori = br.getString("id_kategori_tiket");
+            String iddetTiket = br.getString("id_det_tiket");
             String namaKategori = br.getString("kategori_konser");     
-            listKategori.put(namaKategori, idKategori);
+            listKategori.put(namaKategori, iddetTiket);
         }
-        
+         br.close();
+        bo.close();
+        conn.close();
     }catch(Exception e){
               e.printStackTrace();
          }
 }
    
-   public void kategoriDipilih(String selectedKategori){      
-                if(listKategori.containsKey(selectedKategori)){
-                    String selectedId = listKategori.get(selectedKategori);
-                    selectedId = selectedId;
-                    System.out.println(selectedId);
-                }
+   private void getBank(){
+        listBank.clear();
+    try {
+       Connection conn = connection.getConnection();
+       Statement stmt = conn.createStatement();
+       String bank ="Select * from bank";
+       PreparedStatement ba = conn.prepareStatement(bank);
+       ResultSet rba = ba.executeQuery();
+       
+        while(rba.next()){
+            String idBank = rba.getString("id_bank");
+            String namaBank = rba.getString("nama_bank");     
+            listBank.put(namaBank, idBank);
+        }    
+    }catch(Exception e){
+              e.printStackTrace();
+         }
+       
+   }
+   
+   public void kategoriDipilih(String selectedKategori){  
+       
+        if(listKategori.containsKey(selectedKategori)){
+            selectedId = listKategori.get(selectedKategori);
+            System.out.println(selectedId);
+        }
 
        listKursi.clear();    
        try {
         Connection conn = connection.getConnection();
         Statement stmt = conn.createStatement();
         
-         String kategoriDipilih = "SELECT d.id_det_tiket, d.jumlah_tiket, d.harga_tiket, d.deskripsi, k.id_genre_konser, kt.kategori_konser, d.id_det_tiket " 
-                    + "from konser k " +
-                    "JOIN detail_kategori_tiket d on k.id_konser = d.id_konser "
-                    +
-                    "JOIN kategori_tiket kt on d.id_kategori_tiket = kt.id_kategori_tiket "
-                    +
-                    "where k.id_konser = ?";
-       PreparedStatement kp = conn.prepareStatement(kategoriDipilih);
-       kp.setString(1, id_konser);
+            String kategoriDipilih = "SELECT d.id_det_tiket, d.jumlah_tiket, d.harga_tiket, d.deskripsi, rp.kursi, " +
+                                 "k.id_genre_konser " +
+                                 "FROM konser k " +
+                                 "JOIN detail_kategori_tiket d ON k.id_konser = d.id_konser " +
+                                 "LEFT JOIN riwayat_pembeli rp ON d.id_det_tiket = rp.id_det_tiket " +
+                                 "WHERE k.id_konser = ? AND d.id_det_tiket = ?";  
+        
+        PreparedStatement kp = conn.prepareStatement(kategoriDipilih);
+        kp.setString(1, id_konser);
+        kp.setString(2, selectedId);
        ResultSet br = kp.executeQuery();
-       while(br.next()){
-                
+       
+       List<Integer> kursiTerpakai = new ArrayList<>();
+       
+       int jumlahTiket =0;
+       while(br.next()){  
+           jumlahTiket = br.getInt("jumlah_tiket");
+            int kursi = br.getInt("kursi");
+            if (!br.wasNull()) {
+                kursiTerpakai.add(kursi);
+            }
        }
+       
+       for (int i =1; i<=jumlahTiket; i++){
+          int kursi = i;
+           if(!kursiTerpakai.contains(kursi)){
+               listKursi.add(kursi);
+           }
+       }
+       
+       String[] kursiArray = listKursi.stream()
+                                       .map(Object::toString)
+                                       .toArray(String[]::new);
+        kursiKonserCombo.setModel(new DefaultComboBoxModel<>(kursiArray));
+      
+        
        } catch(Exception e){
            e.printStackTrace();
        }
        
    }
 
+   public void bank(String selectedBank){
+       if(listBank.containsKey(selectedBank)){
+           String idBank = listBank.get(selectedBank);
+           id_bank = idBank;
+        }
+   }
     
 
+   public void simpanData(String idPembeli, String iddettiket, String idbank, String idkonser, int kursibooking){
+       id_riwayat = UUID.randomUUID().toString();
+        try {
+           Connection conn = connection.getConnection();
+           Statement stmt = conn.createStatement();
+           String queryp = "INSERT INTO riwayat_pembeli " + 
+                   "(id_riwayat, id_pembeli, id_det_tiket, id_konser, id_bank, kursi) " +
+                   "VALUES (?, ?, ?, ?, ?, ?)";
+           PreparedStatement psq = conn.prepareStatement(queryp);
+           
+           psq.setString(1, id_riwayat);
+           psq.setString(2, idPembeli);
+           psq.setString(3, iddettiket);
+           psq.setString(4, id_konser);
+           psq.setString(5, idbank);
+           psq.setInt(6, kursibooking);
+          
+          int rowsAffected = psq.executeUpdate();
+           if(rowsAffected > 0){
+                new riwayatPembeli(id_pembeli).setVisible(true);
+                    dispose();
+           } else {
+               JOptionPane.showMessageDialog(null, "Gagal menyimpan Data", 
+                       "Rrror", JOptionPane.ERROR_MESSAGE);
+           }
+           psq.close();
+           conn.close();
+       }catch(SQLException e){
+           e.printStackTrace();
+       }
+   }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

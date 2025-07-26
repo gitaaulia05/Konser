@@ -53,84 +53,111 @@ public class riwayatAdmin extends JFrame {
     }
 
 private void tampilkanData() {
+    contentPanel.removeAll(); // Bersihkan konten sebelumnya
+    
     try (Connection conn = connection.getConnection()) {
-        String sql = """
-            SELECT 
-                k.nama_konser,
-                k.tanggal,
-                k.lokasi,
-                g.genre_konser,
-                kt.kategori_konser,
-                dkt.jumlah_tiket,
-                dkt.harga_tiket,
-                COUNT(rp.id_riwayat) AS terjual,
-                COUNT(rp.id_riwayat) * dkt.harga_tiket AS total_pendapatan
-            FROM konser k
-            JOIN genre_konser g ON k.id_genre_konser = g.id_genre
-            JOIN detail_kategori_tiket dkt ON k.id_konser = dkt.id_konser
-            JOIN kategori_tiket kt ON kt.id_kategori_tiket = dkt.id_kategori_tiket
-            LEFT JOIN riwayat_pembeli rp ON rp.id_det_tiket = dkt.id_det_tiket
-            WHERE k.id_admin = ?
-            GROUP BY 
-                k.id_konser, 
-                dkt.id_det_tiket,
-                k.nama_konser,
-                k.tanggal,
-                k.lokasi,
-                g.genre_konser,
-                kt.kategori_konser,
-                dkt.jumlah_tiket,
-                dkt.harga_tiket;
-        """;
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, id_admin);
-        ResultSet rs = stmt.executeQuery();
+        // Query untuk mendapatkan semua konser admin
+        String sqlKonser = "SELECT k.id_konser, k.nama_konser, k.nama_band, k.tanggal, k.lokasi, g.genre_konser " +
+                          "FROM konser k " +
+                          "JOIN genre_konser g ON k.id_genre_konser = g.id_genre " +
+                          "WHERE k.id_admin = ? " +
+                          "ORDER BY k.tanggal DESC";
+        
+        PreparedStatement stmtKonser = conn.prepareStatement(sqlKonser);
+        stmtKonser.setString(1, id_admin);
+        ResultSet rsKonser = stmtKonser.executeQuery();
 
-        while (rs.next()) {
-            String namaKonser = rs.getString("nama_konser");
-            String tanggal = rs.getString("tanggal");
-            String lokasi = rs.getString("lokasi");
-            String genre = rs.getString("genre_konser");
-            String kategori = rs.getString("kategori_konser");
-            int jumlah = rs.getInt("jumlah_tiket");
-            int terjual = rs.getInt("terjual");
-            double harga = rs.getDouble("harga_tiket");
-            double pendapatan = rs.getDouble("total_pendapatan");
+        while (rsKonser.next()) {
+            String idKonser = rsKonser.getString("id_konser");
+            String namaKonser = rsKonser.getString("nama_konser");
+            String namaBand = rsKonser.getString("nama_band");
+            String tanggal = rsKonser.getString("tanggal");
+            String lokasi = rsKonser.getString("lokasi");
+            String genre = rsKonser.getString("genre_konser");
 
-            JPanel panel = new JPanel(new BorderLayout());
-            panel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-            panel.setBackground(Color.WHITE);
-            panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 160));
-
-            JPanel innerPanel = new JPanel(new GridLayout(0, 2, 10, 5));
-            innerPanel.setOpaque(false); // biar ikut warna putih
-
-            innerPanel.add(new JLabel("🎤 Nama Konser: " + namaKonser));
-            innerPanel.add(new JLabel("📅 Tanggal: " + tanggal));
-            innerPanel.add(new JLabel("📍 Lokasi: " + lokasi));
-            innerPanel.add(new JLabel("🎶 Genre: " + genre));
-            innerPanel.add(new JLabel("🎫 Kategori Tiket: " + kategori));
-            innerPanel.add(new JLabel("📦 Jumlah Tiket: " + jumlah));
-            innerPanel.add(new JLabel("✅ Terjual: " + terjual));
-            innerPanel.add(new JLabel("💵 Harga: Rp " + String.format("%,.0f", harga)));
-            innerPanel.add(new JLabel("📈 Total Pendapatan: Rp " + String.format("%,.0f", pendapatan)));
-
-            panel.add(innerPanel, BorderLayout.CENTER);
-
-            panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.GRAY, 1, true),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+            // Panel utama untuk setiap konser
+            JPanel panelKonser = new JPanel(new BorderLayout());
+            panelKonser.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
             ));
+            panelKonser.setBackground(Color.WHITE);
+            panelKonser.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
 
-            contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-            contentPanel.add(panel);
+            // Header konser
+            JPanel headerPanel = new JPanel(new GridLayout(0, 1, 5, 5));
+            headerPanel.setOpaque(false);
+            
+            headerPanel.add(new JLabel("🎤 " + namaKonser, JLabel.LEFT) {{
+                setFont(getFont().deriveFont(Font.BOLD, 16f));
+            }});
+            headerPanel.add(new JLabel("🎸 " + namaBand));
+            headerPanel.add(new JLabel("📅 " + tanggal + "  |  📍 " + lokasi));
+            headerPanel.add(new JLabel("🎶 Genre: " + genre));
+            
+            panelKonser.add(headerPanel, BorderLayout.NORTH);
+
+            // Panel untuk kategori tiket
+            JPanel kategoriPanel = new JPanel();
+            kategoriPanel.setLayout(new BoxLayout(kategoriPanel, BoxLayout.Y_AXIS));
+            kategoriPanel.setBorder(BorderFactory.createTitledBorder("Kategori Tiket"));
+            kategoriPanel.setOpaque(false);
+
+            // Query untuk mendapatkan kategori tiket per konser
+            String sqlKategori = "SELECT kt.kategori_konser, dkt.jumlah_tiket, dkt.harga_tiket, " +
+                                "COUNT(rp.id_riwayat) AS terjual, " +
+                                "COUNT(rp.id_riwayat) * dkt.harga_tiket AS total_pendapatan " +
+                                "FROM detail_kategori_tiket dkt " +
+                                "JOIN kategori_tiket kt ON dkt.id_kategori_tiket = kt.id_kategori_tiket " +
+                                "LEFT JOIN riwayat_pembeli rp ON rp.id_det_tiket = dkt.id_det_tiket " +
+                                "WHERE dkt.id_konser = ? " +
+                                "GROUP BY dkt.id_det_tiket, kt.kategori_konser, dkt.jumlah_tiket, dkt.harga_tiket";
+            
+            PreparedStatement stmtKategori = conn.prepareStatement(sqlKategori);
+            stmtKategori.setString(1, idKonser);
+            ResultSet rsKategori = stmtKategori.executeQuery();
+
+            while (rsKategori.next()) {
+                String kategori = rsKategori.getString("kategori_konser");
+                int jumlah = rsKategori.getInt("jumlah_tiket");
+                int terjual = rsKategori.getInt("terjual");
+                double harga = rsKategori.getDouble("harga_tiket");
+                double pendapatan = rsKategori.getDouble("total_pendapatan");
+
+                JPanel panelKategori = new JPanel(new GridLayout(0, 2, 10, 5));
+                panelKategori.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+                panelKategori.setBackground(new Color(240, 240, 240));
+                panelKategori.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+
+                panelKategori.add(new JLabel("🎫 " + kategori));
+                panelKategori.add(new JLabel(""));
+                panelKategori.add(new JLabel("📦 Total: " + jumlah));
+                panelKategori.add(new JLabel("✅ Terjual: " + terjual));
+                panelKategori.add(new JLabel("💵 Harga: Rp " + String.format("%,.0f", harga)));
+                panelKategori.add(new JLabel("📈 Pendapatan: Rp " + String.format("%,.0f", pendapatan)));
+
+                kategoriPanel.add(panelKategori);
+                kategoriPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+            }
+
+            panelKonser.add(kategoriPanel, BorderLayout.CENTER);
+            contentPanel.add(panelKonser);
+            contentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        }
+
+        if (contentPanel.getComponentCount() == 0) {
+            contentPanel.add(new JLabel("Tidak ada data konser", JLabel.CENTER));
         }
 
         contentPanel.revalidate();
         contentPanel.repaint();
 
     } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Gagal mengambil data: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, 
+            "Gagal mengambil data: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
 }
 

@@ -39,11 +39,10 @@ public class tambahKategori extends javax.swing.JFrame {
     private Map<String, String> listKategori = new HashMap<>();
     
     public tambahKategori(String id_admin, String id_konser) {
-         initUi();
-         this.id_admin = id_admin;
-         this.id_konser = id_konser;        
-         kategoriList();
-       
+        this.id_admin = id_admin;
+        this.id_konser = id_konser; 
+        kategoriList(); 
+        initUi(); 
     }
     
     private void initUi() {
@@ -104,7 +103,7 @@ public class tambahKategori extends javax.swing.JFrame {
         card.setPreferredSize(new Dimension(700, 200));
 
         // === Label judul atas
-        JLabel namaKonserLbl = new JLabel("Loading...");
+        JLabel namaKonserLbl = new JLabel();
         namaKonserLbl.setFont(new Font("SansSerif", Font.BOLD, 20));
         namaKonserLbl.setHorizontalAlignment(SwingConstants.CENTER);
         card.add(namaKonserLbl, BorderLayout.NORTH);
@@ -114,7 +113,7 @@ public class tambahKategori extends javax.swing.JFrame {
         detailPanel.setOpaque(false);
         detailPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-        JLabel judulLbl = new JLabel("...");
+        JLabel judulLbl = new JLabel();
         judulLbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
         judulLbl.setVerticalAlignment(SwingConstants.TOP);
         detailPanel.add(judulLbl, BorderLayout.WEST);
@@ -185,6 +184,7 @@ public class tambahKategori extends javax.swing.JFrame {
     
     String selectedNamaDefault = (String) comboKategori.getSelectedItem();
     id_kategori = listKategori.get(selectedNamaDefault);
+    
     //comboKategori event klik  
         comboKategori.addActionListener(e -> {
           String selectedNama= (String) comboKategori.getSelectedItem();

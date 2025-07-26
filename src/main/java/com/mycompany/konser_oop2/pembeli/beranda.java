@@ -105,7 +105,7 @@ public class beranda extends javax.swing.JFrame {
                     cardLayout.show(mainPanel, "Beranda");
                     break;
                 case "KONSERKU":
-                     new riwayatPembeli(id_pembeli).setVisible(true);
+                     new riwayatPembeli2(id_pembeli).setVisible(true);
                    dispose();  
                     break;
                 case "RIWAYAT":
@@ -192,6 +192,8 @@ public class beranda extends javax.swing.JFrame {
                     "from konser k " + "JOIN genre_konser g on k.id_genre_konser = g.id_genre "
                     + "JOIN detail_kategori_tiket dk on k.id_konser = dk.id_konser "
                     + "where g.genre_konser = ? " + 
+                     "AND (k.tanggal > CURDATE() " +
+                    "OR (k.tanggal = CURDATE() AND k.jam >= DATE_ADD(CURTIME(), INTERVAL 5 MINUTE))) " +
                     "GROUP BY k.id_konser, k.nama_konser, k.lokasi, k.jam, k.tanggal ";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, genre);

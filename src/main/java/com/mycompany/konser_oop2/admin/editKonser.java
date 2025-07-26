@@ -165,9 +165,11 @@ private JPanel createDetailCard() {
 
         // Cek validasi
         if (inputCal.before(minTime)) {
-            JOptionPane.showMessageDialog(this, "Waktu konser harus minimal 1 jam dari sekarang!");
+            JOptionPane.showMessageDialog(this, "Waktu konser harus minimal 1 jam dari sekarang Dan Minimal Tanggal Hari ini!");
             return;
         }
+        
+        
         try {
             Connection conn = connection.getConnection();
             Statement checkId = conn.createStatement();

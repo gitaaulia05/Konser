@@ -390,7 +390,7 @@ public class bookingKonser extends javax.swing.JFrame {
          
            int rowsAffected = irp.executeUpdate();
            if(rowsAffected > 0){
-                new riwayatPembeli(id_pembeli).setVisible(true);
+                new riwayatPembeli2(id_pembeli).setVisible(true);
                     dispose();
            } else {
                JOptionPane.showMessageDialog(null, "Gagal menyimpan Data", 
@@ -419,7 +419,7 @@ public class bookingKonser extends javax.swing.JFrame {
     }//GEN-LAST:event_berandaLblMouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        new riwayatPembeli(id_pembeli).setVisible(true);
+        new riwayatPembeli2(id_pembeli).setVisible(true);
                    dispose();  
     }//GEN-LAST:event_jLabel3MouseClicked
 

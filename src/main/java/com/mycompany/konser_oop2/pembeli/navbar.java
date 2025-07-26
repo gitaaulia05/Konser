@@ -113,10 +113,6 @@ private String id_pembeli;
                     new riwayatPembeli(id_pembeli).setVisible(true);
                     Window window = SwingUtilities.getWindowAncestor(navbar.this);
                     window.dispose();
-                } else if(text.equalsIgnoreCase("Konserku")){
-                    new riwayatPembeli(id_pembeli).setVisible(true);
-                    Window window = SwingUtilities.getWindowAncestor(navbar.this);
-                    window.dispose();
                 } else if (text.equalsIgnoreCase("Login")){
                     new landingPage().setVisible(true);
                     Window window = SwingUtilities.getWindowAncestor(navbar.this);
