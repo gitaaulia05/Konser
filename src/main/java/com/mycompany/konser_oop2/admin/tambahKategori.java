@@ -43,38 +43,46 @@ public class tambahKategori extends javax.swing.JFrame {
          this.id_admin = id_admin;
          this.id_konser = id_konser;        
          kategoriList();
-        setTitle("Tambah Kategori Tiket");
-        setSize(800, 400);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
-        
-        // === Navbar ===
-        navbarAdmin navbar = new navbarAdmin(id_admin);
-        add(navbar, BorderLayout.NORTH);
-
-        // === Card Detail ===
-        JPanel detailCard = createDetailCard();
-        JPanel centerPanel = new JPanel();
-        centerPanel.setBackground(Color.WHITE);
-        centerPanel.add(detailCard);
-        add(centerPanel, BorderLayout.CENTER);
-        
-        buatForm(centerPanel); 
-        add(centerPanel, BorderLayout.CENTER);
-
-        setVisible(true); 
+       
     }
-    
     
     private void initUi() {
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }  
-    }
-            
+    try {
+        UIManager.setLookAndFeel(new FlatLightLaf());
+    } catch (Exception e) {
+        e.printStackTrace();
+    }  
+
+    setTitle("Tambah Kategori Tiket");
+    setSize(800, 400);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setLocationRelativeTo(null);
+    setLayout(new BorderLayout());
+
+    // === Navbar ===
+    navbarAdmin navbar = new navbarAdmin(id_admin);
+    add(navbar, BorderLayout.NORTH);
+
+    // === Panel Utama (yang akan discroll) ===
+    JPanel centerPanel = new JPanel();
+    centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS)); // pastikan vertikal
+    centerPanel.setBackground(Color.WHITE);
+
+    // Tambahkan detail card dan form ke panel ini
+    JPanel detailCard = createDetailCard();
+    centerPanel.add(detailCard);
+    buatForm(centerPanel); // form akan ditambahkan ke centerPanel
+
+    // Bungkus centerPanel dengan JScrollPane
+    JScrollPane scrollPane = new JScrollPane(centerPanel);
+    scrollPane.setBorder(BorderFactory.createEmptyBorder()); // opsional, hilangkan border default
+    scrollPane.getVerticalScrollBar().setUnitIncrement(16);  // smooth scroll
+
+    add(scrollPane, BorderLayout.CENTER); // tambahkan scrollPane, bukan centerPanel langsung
+
+    setVisible(true);
+}
+       
     private JPanel createDetailCard() {
         JPanel card = new JPanel() {
             @Override
@@ -303,41 +311,6 @@ public class tambahKategori extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(tambahKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(tambahKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(tambahKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(tambahKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new tambahKategori("cc4e86d9-a947-4a7b-84e3-f4636ee6929e", "e7b2d9c8-a1b3-429d-9e69-34e9ada8935b").setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

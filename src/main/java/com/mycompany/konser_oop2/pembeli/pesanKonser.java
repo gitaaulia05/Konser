@@ -39,34 +39,41 @@ public class pesanKonser extends javax.swing.JFrame {
     private Map<String, String> listKursi = new HashMap<>();
     
        JComboBox<String> kursiKonserCombo ;
-    public pesanKonser(String konserId , String Pembeli) {
-        this.id_konser = konserId;
-        this.id_pembeli = Pembeli;     
-        getKategoriKonser();
-        
-        setTitle("Detail Konser");
-        setSize(800, 400);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
-        
-        // === Navbar ===
-        navbar navbar = new navbar(id_pembeli); // pastikan class ini ada
-        add(navbar, BorderLayout.NORTH);
-
-        // === Card Detail ===
-        JPanel detailCard = createDetailCard();
-        JPanel centerPanel = new JPanel();
-        centerPanel.setBackground(Color.WHITE);
-        centerPanel.add(detailCard);
-        add(centerPanel, BorderLayout.CENTER);
-        
-        buatFormPemesan(centerPanel); 
-        add(centerPanel, BorderLayout.CENTER);
-
-        setVisible(true);
-    }
+   public pesanKonser(String konserId, String Pembeli) {
+    this.id_konser = konserId;
+    this.id_pembeli = Pembeli;     
+    getKategoriKonser();
     
+    setTitle("Detail Konser");
+    setSize(800, 400);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setLocationRelativeTo(null);
+    setLayout(new BorderLayout());
+    
+    // === Navbar ===
+    navbar navbar = new navbar(id_pembeli); // pastikan class ini ada
+    add(navbar, BorderLayout.NORTH);
+
+    // === Panel yang akan discroll ===
+    JPanel centerPanel = new JPanel();
+    centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS)); // agar vertikal
+    centerPanel.setBackground(Color.WHITE);
+
+    // Tambahkan komponen ke centerPanel
+    JPanel detailCard = createDetailCard();
+    centerPanel.add(detailCard);
+    buatFormPemesan(centerPanel); // tambahkan form ke panel yang sama
+
+    // === Scroll Pane ===
+    JScrollPane scrollPane = new JScrollPane(centerPanel);
+    scrollPane.setBorder(BorderFactory.createEmptyBorder());
+    scrollPane.getVerticalScrollBar().setUnitIncrement(16); // agar scroll halus
+
+    add(scrollPane, BorderLayout.CENTER); // Tambahkan scrollPane, bukan centerPanel langsung
+
+    setVisible(true);
+}
+
       private JPanel createDetailCard() {
         JPanel card = new JPanel() {
             @Override
@@ -256,9 +263,8 @@ public class pesanKonser extends javax.swing.JFrame {
                     selectedId = selectedId;
                     System.out.println(selectedId);
                 }
-       
-       listKursi.clear();
-       
+
+       listKursi.clear();    
        try {
         Connection conn = connection.getConnection();
         Statement stmt = conn.createStatement();
@@ -309,40 +315,7 @@ public class pesanKonser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(pesanKonser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(pesanKonser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(pesanKonser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(pesanKonser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-              //  new pesanKonser("5773476a-064f-4bb3-b518-5747e6917dc0", "9e99d231-4a94-4c1e-aa87-0d9b672cff6a").setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

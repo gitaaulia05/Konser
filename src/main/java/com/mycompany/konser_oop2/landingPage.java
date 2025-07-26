@@ -4,6 +4,7 @@
  */
 package com.mycompany.konser_oop2;
 import com.mycompany.konser_oop2.admin.loginAdmin;
+import com.mycompany.konser_oop2.pembeli.beranda;
 import com.mycompany.konser_oop2.pembeli.loginPembeli;
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +13,7 @@ import java.awt.event.MouseEvent;
 
 public class landingPage extends javax.swing.JFrame {
 
-    /**
-     * Creates new form landingPage
-     */
+    private String id_admin = null;
     public landingPage() {
          setTitle("Login - Aplikasi Konserku");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,6 +67,12 @@ public class landingPage extends javax.swing.JFrame {
         gbc.gridwidth = 2;
         JButton loginAButton = new JButton("Login Administrator" );
         rightPanel.add(loginAButton, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        JButton loginKButton = new JButton("Kembali" );
+        rightPanel.add(loginKButton, gbc);
 
         // === Gabungkan Panel Kiri dan Kanan ===
         add(leftPanel, BorderLayout.WEST);
@@ -81,6 +86,11 @@ public class landingPage extends javax.swing.JFrame {
         
         loginPButton.addActionListener(e -> {
             new loginPembeli().setVisible(true);
+                   dispose();
+        });
+        
+        loginKButton.addActionListener(e -> {
+            new beranda(id_admin).setVisible(true);
                    dispose();
         });
         
@@ -111,40 +121,6 @@ public class landingPage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(landingPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(landingPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(landingPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(landingPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new landingPage().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
