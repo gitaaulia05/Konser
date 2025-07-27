@@ -35,6 +35,8 @@ public class pesanKonser extends javax.swing.JFrame {
     
     private String metodePembayaran;
     private String tanggal_transaksi;
+    
+    JTextArea benefitArea;
 
     
     private Map<String, String> listBank = new HashMap<>();
@@ -188,40 +190,6 @@ public class pesanKonser extends javax.swing.JFrame {
       kategoriKonserCombo.setSelectedIndex(0);
       pilihanPembayaranCombo.setSelectedIndex(0);
       
-      
-     
-      // Evenet klik Pembayaran 
-      pilihanPembayaranCombo.addActionListener(e -> {
-          String selectedBank = (String) pilihanPembayaranCombo.getSelectedItem();
-          bank(selectedBank); // Fungsi yang dipanggil saat diklik
-      });
-      
-      // === Event Klik kategori konser ===
-      kategoriKonserCombo.addActionListener(e -> {
-          String selectedKategori = (String) kategoriKonserCombo.getSelectedItem();
-          kategoriDipilih(selectedKategori); // Fungsi yang dipanggil saat diklik
-      });
-      
-       
-        // Set default kategori dan bank
-  if (!listKategori.isEmpty()) {
-      String firstKategori = listKategori.keySet().iterator().next();
-      kategoriKonserCombo.setSelectedItem(firstKategori);
-      kategoriDipilih(firstKategori); // Panggil agar kursi terisi
-      id_det_tiket = listKategori.get(firstKategori);
-  }
-
-  if (!listBank.isEmpty()) {
-      String firstBank = listBank.keySet().iterator().next();
-      pilihanPembayaranCombo.setSelectedItem(firstBank);
-      id_bank = listBank.get(firstBank);
-  }
-
-  // Ambil kursi pertama setelah kategori dipilih
-  if (!listKursi.isEmpty()) {
-      kursiBooking = listKursi.get(0); // integer langsung
-  }
-
       kiriPanel.add(kategoriKonserCombo);
       kiriPanel.add(kursiKonserCombo);
       kiriPanel.add(pilihanPembayaranCombo);
@@ -238,12 +206,45 @@ public class pesanKonser extends javax.swing.JFrame {
      kananPanel.add(usernameLbl);
     
             // TextArea untuk Benefit
-        JTextArea benefitArea = new JTextArea(5, 20);
-        benefitArea.setText(String.join("\n", listDeskripsi));
+        benefitArea = new JTextArea(5, 20);
         benefitArea.setLineWrap(true);
         benefitArea.setWrapStyleWord(true);
         benefitArea.setEditable(false);
         benefitArea.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        
+        
+         // Evenet klik Pembayaran 
+      pilihanPembayaranCombo.addActionListener(e -> {
+          String selectedBank = (String) pilihanPembayaranCombo.getSelectedItem();
+          bank(selectedBank); // Fungsi yang dipanggil saat diklik
+      });
+      
+      // === Event Klik kategori konser ===
+      kategoriKonserCombo.addActionListener(e -> {
+          String selectedKategori = (String) kategoriKonserCombo.getSelectedItem();
+          kategoriDipilih(selectedKategori); // Fungsi yang dipanggil saat diklik
+          benefitArea.setText(String.join("\n", listDeskripsi));
+      });
+
+            // Set default kategori dan bank
+      if (!listKategori.isEmpty()) {
+          String firstKategori = listKategori.keySet().iterator().next();
+          kategoriKonserCombo.setSelectedItem(firstKategori);
+          kategoriDipilih(firstKategori); // Panggil agar kursi terisi
+          id_det_tiket = listKategori.get(firstKategori);
+      }
+
+      if (!listBank.isEmpty()) {
+          String firstBank = listBank.keySet().iterator().next();
+          pilihanPembayaranCombo.setSelectedItem(firstBank);
+          id_bank = listBank.get(firstBank);
+      }
+
+      // Ambil kursi pertama setelah kategori dipilih
+      if (!listKursi.isEmpty()) {
+          kursiBooking = listKursi.get(0); // integer langsung
+      }
+
 
         // Scroll agar rapi jika panjang
         JScrollPane scrollBenefit = new JScrollPane(benefitArea);
@@ -303,6 +304,7 @@ public class pesanKonser extends javax.swing.JFrame {
 
    private void getKategoriKonser() {
     listKategori.clear();
+    listDeskripsi.clear();
     try {
       Connection conn = connection.getConnection();
       Statement stmt = conn.createStatement();
@@ -320,7 +322,9 @@ public class pesanKonser extends javax.swing.JFrame {
        
         while(br.next()){
             String iddetTiket = br.getString("id_det_tiket");
-            String namaKategori = br.getString("kategori_konser");     
+            String namaKategori = br.getString("kategori_konser");
+            String deskripsidb = br.getString("deskripsi");
+            listDeskripsi.add(deskripsidb);
             listKategori.put(namaKategori, iddetTiket);
         }
          br.close();
@@ -380,7 +384,7 @@ public class pesanKonser extends javax.swing.JFrame {
        int jumlahTiket =0;
        while(br.next()){  
            jumlahTiket = br.getInt("jumlah_tiket");
-            int kursi = br.getInt("kursi");
+           int kursi = br.getInt("kursi");
            String deskripsidb = br.getString("deskripsi");
            listDeskripsi.add(deskripsidb);
             if (!br.wasNull()) {
