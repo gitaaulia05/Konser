@@ -47,8 +47,9 @@ public class editKonser extends javax.swing.JFrame {
     public editKonser(String id_admin, String id_konser) {
         this.id_admin = id_admin;
         this.id_konser = id_konser;
-        initUi();
         kategoriList();
+        initUi();
+        
         
     }
     
@@ -59,7 +60,7 @@ public class editKonser extends javax.swing.JFrame {
             e.printStackTrace();
         }
                 
-       setTitle("Update Detail Kategori Tiket ");
+       setTitle("Update Konser");
         setSize(800, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -93,6 +94,13 @@ private JPanel createDetailCard() {
 
      String selectedNamaDefault = (String) kategoriKonserField.getSelectedItem();
      id_kategori = listKategori.get(selectedNamaDefault);
+     
+       if (!listKategori.isEmpty()) {
+      String firstKategori = listKategori.keySet().iterator().next();
+      kategoriKonserField.setSelectedItem(firstKategori);
+      kategoriDipilih(firstKategori); // Panggil agar kursi terisi
+      id_kategori = listKategori.get(firstKategori);
+    }
     //comboKategori event klik  
         kategoriKonserField.addActionListener(e -> {
           String selectedNama= (String) kategoriKonserField.getSelectedItem();
@@ -288,6 +296,12 @@ private JPanel createDetailCard() {
              e.printStackTrace( );
          }
     }
+     
+       public void kategoriDipilih(String selectedKategori){      
+        if(listKategori.containsKey(selectedKategori)){
+            String selectedId = listKategori.get(selectedKategori);
+        }
+       }
 
 
     /**

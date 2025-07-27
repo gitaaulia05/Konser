@@ -41,6 +41,7 @@ public class pesanKonser extends javax.swing.JFrame {
     
     private Map<String, String> listKategori = new HashMap<>();
     private List<Integer> listKursi = new ArrayList<>();
+    private List<String>listDeskripsi =new ArrayList<>(); 
     
     JComboBox<String> kursiKonserCombo ;
     JComboBox<String> pilihanPembayaranCombo;
@@ -187,6 +188,7 @@ public class pesanKonser extends javax.swing.JFrame {
       kategoriKonserCombo.setSelectedIndex(0);
       pilihanPembayaranCombo.setSelectedIndex(0);
       
+      
      
       // Evenet klik Pembayaran 
       pilihanPembayaranCombo.addActionListener(e -> {
@@ -220,17 +222,37 @@ public class pesanKonser extends javax.swing.JFrame {
       kursiBooking = listKursi.get(0); // integer langsung
   }
 
-
       kiriPanel.add(kategoriKonserCombo);
       kiriPanel.add(kursiKonserCombo);
       kiriPanel.add(pilihanPembayaranCombo);
 
       // === Kanan ===
       JPanel kananPanel = new JPanel(new BorderLayout());
+      kananPanel.setLayout(new BoxLayout(kananPanel, BoxLayout.Y_AXIS));
       kananPanel.setBackground(Color.WHITE);
-      JLabel usernameLbl = new JLabel("Username: " + id_pembeli); 
-      usernameLbl.setFont(new Font("SansSerif", Font.PLAIN, 14));
-      kananPanel.add(usernameLbl, BorderLayout.NORTH);
+      
+      // username
+     JLabel usernameLbl = new JLabel("Username : " + navbar.getNamaPembeli(id_pembeli)); 
+     usernameLbl.setFont(new Font("SansSerif", Font.PLAIN, 14));
+     usernameLbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+     kananPanel.add(usernameLbl);
+    
+            // TextArea untuk Benefit
+        JTextArea benefitArea = new JTextArea(5, 20);
+        benefitArea.setText(String.join("\n", listDeskripsi));
+        benefitArea.setLineWrap(true);
+        benefitArea.setWrapStyleWord(true);
+        benefitArea.setEditable(false);
+        benefitArea.setFont(new Font("SansSerif", Font.PLAIN, 13));
+
+        // Scroll agar rapi jika panjang
+        JScrollPane scrollBenefit = new JScrollPane(benefitArea);
+        scrollBenefit.setAlignmentX(Component.LEFT_ALIGNMENT);
+        scrollBenefit.setBorder(BorderFactory.createTitledBorder("Benefit Kategori Konser"));
+
+        // Tambahkan ke panel
+        kananPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        kananPanel.add(scrollBenefit);
 
       // Gabungkan kiri dan kanan ke grid
       gridPanel.add(kiriPanel);
@@ -264,8 +286,9 @@ public class pesanKonser extends javax.swing.JFrame {
       kembaliLbl.addMouseListener(new MouseAdapter() {
           @Override
           public void mouseClicked(MouseEvent e) {
-              dispose(); // misalnya: menutup halaman saat kembali
-              // atau bisa ganti ke halaman sebelumnya
+              new beranda(id_pembeli).setVisible(true);
+              dispose();
+            
           }
       });
 
@@ -290,6 +313,7 @@ public class pesanKonser extends javax.swing.JFrame {
                     "JOIN kategori_tiket kt on d.id_kategori_tiket = kt.id_kategori_tiket "
                     +
                     "where k.id_konser = ?";
+         
        PreparedStatement bo = conn.prepareStatement(booking);
        bo.setString(1, id_konser);
        ResultSet br = bo.executeQuery();
@@ -327,14 +351,14 @@ public class pesanKonser extends javax.swing.JFrame {
        
    }
    
-   public void kategoriDipilih(String selectedKategori){  
-       
+   public void kategoriDipilih(String selectedKategori){      
         if(listKategori.containsKey(selectedKategori)){
             selectedId = listKategori.get(selectedKategori);
             System.out.println(selectedId);
         }
 
        listKursi.clear();    
+       listDeskripsi.clear();
        try {
         Connection conn = connection.getConnection();
         Statement stmt = conn.createStatement();
@@ -357,6 +381,8 @@ public class pesanKonser extends javax.swing.JFrame {
        while(br.next()){  
            jumlahTiket = br.getInt("jumlah_tiket");
             int kursi = br.getInt("kursi");
+           String deskripsidb = br.getString("deskripsi");
+           listDeskripsi.add(deskripsidb);
             if (!br.wasNull()) {
                 kursiTerpakai.add(kursi);
             }

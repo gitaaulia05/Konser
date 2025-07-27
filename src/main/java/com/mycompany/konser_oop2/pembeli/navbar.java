@@ -34,7 +34,7 @@ private String id_pembeli;
         leftPanel.setOpaque(false);
         leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
         if(id_pembeli != null){
-             leftPanel.add(makeNavItem(getNamaPembeli()));
+             leftPanel.add(makeNavItem(getNamaPembeli(id_pembeli)));
              leftPanel.add(makeNavItem("Logout"));
         } else {
             leftPanel.add(makeNavItem("Login"));
@@ -52,7 +52,7 @@ private String id_pembeli;
         add(rightPanel, BorderLayout.EAST);
     }
 
-    private String getNamaPembeli() {
+    public static String getNamaPembeli(String id_pembeli) {
         String nama = "USERNAME";
         try {
             Connection conn = connection.getConnection();
