@@ -61,4 +61,6 @@ Seiring meningkatnya kebutuhan layanan hiburan digital, sistem ini hadir sebagai
 3. Download Database : <a href="/konser.sql">konser.sql</a>
 
 ## 🎬 Demo Aplikasi
- -- coming soon --
+
+[![Tonton Video di YouTube](https://img.youtube.com/vi/r3W1kWThiKI/0.jpg)](https://www.youtube.com/watch?v=r3W1kWThiKI)
+
