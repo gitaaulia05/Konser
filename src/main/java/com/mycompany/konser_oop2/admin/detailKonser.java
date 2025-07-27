@@ -17,6 +17,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Stroke;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -94,7 +95,7 @@ public class detailKonser extends javax.swing.JFrame {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // scroll lebih halus
         add(scrollPane, BorderLayout.CENTER);
        
-
+        loadUI();
         setVisible(true); 
     }
     
@@ -209,12 +210,13 @@ public class detailKonser extends javax.swing.JFrame {
             int kuota = rs.getInt("jumlah_tiket");
             String id_kategori = rs.getString("id_det_tiket");
 
-            JPanel itemPanel = new JPanel(new GridLayout(1, 3));
-            itemPanel.setMaximumSize(new Dimension(700, 30));
+            JPanel itemPanel = new JPanel(new BorderLayout());
+            itemPanel.setMaximumSize(new Dimension(700, 50));
+            
             itemPanel.setBackground(new Color(245, 245, 245));
             itemPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)
             ));
 
             JLabel labelInfo = new JLabel(namaKategori + " | Harga: Rp" + harga + " | Kuota: " + kuota);
@@ -224,8 +226,8 @@ public class detailKonser extends javax.swing.JFrame {
             JPanel tombolPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             tombolPanel.setOpaque(false);
 
-            JButton editBtn = new JButton("✏️");
-            editBtn.setPreferredSize(new Dimension(45, 25));
+            JButton editBtn = new JButton("Edit️");
+            editBtn.setMargin(new Insets(5, 15, 5, 15));
             editBtn.setToolTipText("Edit kategori");
             editBtn.addActionListener(e -> {
                 // Buka jendela/tab edit
@@ -233,8 +235,8 @@ public class detailKonser extends javax.swing.JFrame {
                 dispose();
             });
 
-            JButton deleteBtn = new JButton("🗑️");
-            deleteBtn.setPreferredSize(new Dimension(45, 25));
+            JButton deleteBtn = new JButton("Hapus️");
+            deleteBtn.setMargin(new Insets(5, 15, 5, 15));
             deleteBtn.setToolTipText("Hapus kategori");
             deleteBtn.addActionListener(e -> {
                 int konfirmasi = JOptionPane.showConfirmDialog(panel,
@@ -262,6 +264,10 @@ public class detailKonser extends javax.swing.JFrame {
 
    private void loadUI() {
     getContentPane().removeAll();
+    
+    // navbar
+    navbarAdmin navbar = new navbarAdmin(id_admin);
+    add(navbar, BorderLayout.NORTH);
 
     JPanel wrapperPanel = new JPanel();
     wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.Y_AXIS));

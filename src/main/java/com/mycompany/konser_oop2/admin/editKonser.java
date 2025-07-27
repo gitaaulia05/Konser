@@ -4,6 +4,7 @@
  */
 package com.mycompany.konser_oop2.admin;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import com.mycompany.konser_oop2.connection;
 import com.toedter.calendar.JDateChooser;
 import java.awt.BorderLayout;
@@ -44,11 +45,21 @@ public class editKonser extends javax.swing.JFrame {
         private Map<String, String> listKategori = new HashMap<>();
         
     public editKonser(String id_admin, String id_konser) {
-        initComponents();
         this.id_admin = id_admin;
         this.id_konser = id_konser;
+        initUi();
         kategoriList();
-        setTitle("Update Detail Kategori Tiket ");
+        
+    }
+    
+    public void initUi(){
+                try {
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+                
+       setTitle("Update Detail Kategori Tiket ");
         setSize(800, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -56,6 +67,7 @@ public class editKonser extends javax.swing.JFrame {
         
         // === Navbar ===
         navbarAdmin navbar = new navbarAdmin(id_admin);
+        navbar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY)); 
         add(navbar, BorderLayout.NORTH);
 
         // === Card Detail ===
@@ -68,6 +80,8 @@ public class editKonser extends javax.swing.JFrame {
 
         setVisible(true); 
     }
+        
+
 private JPanel createDetailCard() {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

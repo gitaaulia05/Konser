@@ -40,8 +40,11 @@ public class riwayatAdmin extends JFrame {
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+        contentPanel.setBackground(Color.WHITE); 
 
         scrollPane = new JScrollPane(contentPanel);
+        scrollPane.getViewport().setBackground(Color.WHITE); 
+        scrollPane.setBackground(Color.WHITE); 
         add(scrollPane, BorderLayout.CENTER);
 
         setSize(800, 600);

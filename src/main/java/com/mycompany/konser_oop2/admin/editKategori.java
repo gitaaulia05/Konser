@@ -34,6 +34,7 @@ public class editKategori extends javax.swing.JFrame {
         
         // === Navbar ===
         navbarAdmin navbar = new navbarAdmin(id_admin);
+        navbar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY)); 
         add(navbar, BorderLayout.NORTH);
 
         // === Card Detail ===
@@ -108,6 +109,8 @@ public class editKategori extends javax.swing.JFrame {
     panel.add(new JScrollPane(deskripsiArea));
 
     JButton simpanBtn = new JButton("Simpan Perubahan");
+    
+    
     simpanBtn.addActionListener(e -> {
         String selectedKategori = (String) kategoriCombo.getSelectedItem();
         String id_kategori_tiket = kategoriMap.get(selectedKategori);
@@ -131,6 +134,8 @@ public class editKategori extends javax.swing.JFrame {
             ps.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Data berhasil diperbarui!");
+            detailKonser detailFrame = new detailKonser(id_admin, id_konser);
+                 detailFrame.setVisible(true);
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Gagal memperbarui data.");
@@ -138,12 +143,7 @@ public class editKategori extends javax.swing.JFrame {
     });
 
      JButton kembaliBtn = new JButton("kembali");
-     
-     simpanBtn.addActionListener(e -> {       
-           new detailKonser(id_admin, id_konser).setVisible(true);
-           dispose();
-     });
-     
+
      kembaliBtn.addActionListener(e -> {
          new detailKonser(id_admin, id_konser).setVisible(true);
            dispose();
