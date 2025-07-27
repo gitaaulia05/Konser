@@ -458,7 +458,7 @@ public class pesanKonser extends javax.swing.JFrame {
           
           int rowsAffected = psq.executeUpdate();
            if(rowsAffected > 0){
-                 JOptionPane.showMessageDialog(null, "Berhasil Membeli Tike!");
+                 JOptionPane.showMessageDialog(null, "Berhasil Membeli Tiket!");
                 new riwayatPembeli(id_pembeli).setVisible(true);
                     dispose();
            } else {
