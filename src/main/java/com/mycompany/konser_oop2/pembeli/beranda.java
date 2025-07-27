@@ -1,7 +1,7 @@
 
 package com.mycompany.konser_oop2.pembeli;
 import com.mycompany.konser_oop2.connection;
-import com.mycompany.konser_oop2.pembeli.bookingKonser;
+
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
@@ -105,7 +105,7 @@ public class beranda extends javax.swing.JFrame {
                     cardLayout.show(mainPanel, "Beranda");
                     break;
                 case "KONSERKU":
-                     new riwayatPembeli2(id_pembeli).setVisible(true);
+                     new riwayatPembeli(id_pembeli).setVisible(true);
                    dispose();  
                     break;
                 case "RIWAYAT":

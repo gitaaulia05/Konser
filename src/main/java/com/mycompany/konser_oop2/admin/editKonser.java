@@ -142,7 +142,7 @@ private JPanel createDetailCard() {
         tanggal = dateChooser.getDate();
         jam = new java.sql.Time(((Date) timeSpinner.getValue()).getTime());
 
-        updateData(id_admin, id_konser, id_kategori, nama_konser, nama_band, tanggal, jam);
+        updateData(id_admin, id_konser, id_kategori, nama_konser, nama_band, tanggal, lokasi ,jam);
     });
 
     kembaliBtn.addActionListener(e -> {
@@ -171,8 +171,12 @@ private JPanel createDetailCard() {
 
 
     private void updateData(String id_pemilik, String idKonser , String id_genre, String nama_konser, String nama_band,
-        Date tanggal, java.sql.Time jam){
+        Date tanggal, String lokasiInput, java.sql.Time jam){
         
+        if (nama_konser.isEmpty() || nama_band.isEmpty() || lokasi.isEmpty() || tanggal == null || jam == null) {
+                JOptionPane.showMessageDialog(this, "Lengkapi semua field!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
                 // Ambil waktu sekarang + 1 jam
         Calendar minTime = Calendar.getInstance();
         minTime.add(Calendar.HOUR_OF_DAY, 1);
@@ -208,7 +212,7 @@ private JPanel createDetailCard() {
                 psUpdate.setString(1, id_genre);
                 psUpdate.setString(2, nama_konser);
                 psUpdate.setString(3, nama_band);
-                psUpdate.setString(4, lokasi);
+                psUpdate.setString(4, lokasiInput);
                 psUpdate.setDate(5,  new java.sql.Date(tanggal.getTime()));
                 psUpdate.setTime(6, jam);
                 psUpdate.setString(7, id_konser);

@@ -173,25 +173,36 @@ public class pesanKonser extends javax.swing.JFrame {
       gridPanel.setBackground(Color.WHITE);
 
       // === Kiri ===
-      JPanel kiriPanel = new JPanel();
-      kiriPanel.setLayout(new GridLayout(3, 1, 10, 10));
-      kiriPanel.setBackground(Color.WHITE);
+    JPanel kiriPanel = new JPanel(new GridLayout(3, 2, 10, 10)); // 3 baris, 2 kolom
+    kiriPanel.setBackground(Color.WHITE);
+
       
       // konversi list kursi ke string
       String[] kursiItems = listKursi.stream()
                                       .map(Object::toString)
                                       .toArray(String[]::new);
     
+      JLabel kategoriLabel = new JLabel("Kategori Konser:");
       JComboBox<String> kategoriKonserCombo = new JComboBox<>(listKategori.keySet().toArray(new String[0]));
+      
+      JLabel kursiLabel = new JLabel("Pilih Kursi:");
       kursiKonserCombo = new JComboBox<>(kursiItems);
+      
+      JLabel pembayaranLabel = new JLabel("Metode Pembayaran:");
       pilihanPembayaranCombo = new JComboBox<>(listBank.keySet().toArray(new String[0]));
       
       // set default id
       kategoriKonserCombo.setSelectedIndex(0);
       pilihanPembayaranCombo.setSelectedIndex(0);
       
+      
+      kiriPanel.add(kategoriLabel);
       kiriPanel.add(kategoriKonserCombo);
+      
+      kiriPanel.add(kursiLabel);
       kiriPanel.add(kursiKonserCombo);
+      
+      kiriPanel.add(pembayaranLabel);
       kiriPanel.add(pilihanPembayaranCombo);
 
       // === Kanan ===
@@ -268,7 +279,17 @@ public class pesanKonser extends javax.swing.JFrame {
       pesanBtn.setFocusPainted(false);
       
       pesanBtn.addActionListener(e -> {
-          simpanData(id_pembeli, id_det_tiket, id_bank, id_konser, kursiBooking) ;
+            int konfirmasi = JOptionPane.showConfirmDialog(
+            this,
+            "Apakah Anda yakin ingin membeli tiket konser ini?",
+            "Konfirmasi Pembelian",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            simpanData(id_pembeli, id_det_tiket, id_bank, id_konser, kursiBooking);
+        }       
       });
 
       // Panel untuk tombol + label kembali
@@ -357,8 +378,7 @@ public class pesanKonser extends javax.swing.JFrame {
    
    public void kategoriDipilih(String selectedKategori){      
         if(listKategori.containsKey(selectedKategori)){
-            selectedId = listKategori.get(selectedKategori);
-            System.out.println(selectedId);
+            selectedId = listKategori.get(selectedKategori);         
         }
 
        listKursi.clear();    
@@ -438,11 +458,12 @@ public class pesanKonser extends javax.swing.JFrame {
           
           int rowsAffected = psq.executeUpdate();
            if(rowsAffected > 0){
+                 JOptionPane.showMessageDialog(null, "Berhasil Membeli Tike!");
                 new riwayatPembeli(id_pembeli).setVisible(true);
                     dispose();
            } else {
                JOptionPane.showMessageDialog(null, "Gagal menyimpan Data", 
-                       "Rrror", JOptionPane.ERROR_MESSAGE);
+                       "Error", JOptionPane.ERROR_MESSAGE);
            }
            psq.close();
            conn.close();

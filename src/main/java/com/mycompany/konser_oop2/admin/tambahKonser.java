@@ -12,6 +12,8 @@ import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import static java.time.LocalTime.now;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -28,8 +30,10 @@ public class tambahKonser extends javax.swing.JFrame {
     private String id_kategori;
     private String nama_konser, nama_band, lokasi;
     private Date tanggal;
-    private java.sql.Time jam;
+    private java.sql.Time jam, jamRaw;
     private Map<String, String> listKategori = new LinkedHashMap<>();
+    Date now = new Date(); 
+
     
     public tambahKonser(String id_admin) {
         this.id_admin = id_admin;
@@ -85,36 +89,56 @@ public class tambahKonser extends javax.swing.JFrame {
         JSpinner timeSpinner = new JSpinner(timeModel);
         timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm"));
 
-        // Minimal 1 jam dari sekarang
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR_OF_DAY, 1);
-        timeModel.setStart(cal.getTime());
+      
 
-        // Tambahkan ke panel
-        panel.add(createFormRow("Kategori Konser:", kategoriCombo));
-        panel.add(createFormRow("Nama Konser:", namaKonserField));
-        panel.add(createFormRow("Nama Band:", namaBandField));
-        panel.add(createFormRow("Lokasi:", lokasiField));
-        panel.add(createFormRow("Tanggal:", dateChooser));
-        panel.add(createFormRow("Jam:", timeSpinner));
+            // Tambahkan ke panel
+            panel.add(createFormRow("Kategori Konser:", kategoriCombo));
+            panel.add(createFormRow("Nama Konser:", namaKonserField));
+            panel.add(createFormRow("Nama Band:", namaBandField));
+            panel.add(createFormRow("Lokasi:", lokasiField));
+            panel.add(createFormRow("Tanggal:", dateChooser));
+            panel.add(createFormRow("Jam:", timeSpinner));
 
-        // Tombol
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.WHITE);
-        JButton simpanBtn = new JButton("✅ Simpan");
-        JButton kembaliBtn = new JButton("⬅ Kembali");
+            // Tombol
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setBackground(Color.WHITE);
+            JButton simpanBtn = new JButton("✅ Simpan");
+            JButton kembaliBtn = new JButton("⬅ Kembali");
 
-        simpanBtn.addActionListener(e -> {
-            nama_konser = namaKonserField.getText();
-            nama_band = namaBandField.getText();
-            lokasi = lokasiField.getText();
-            tanggal = dateChooser.getDate();
-            jam = new java.sql.Time(((Date) timeSpinner.getValue()).getTime());
+            simpanBtn.addActionListener(e -> {
+                nama_konser = namaKonserField.getText();
+                nama_band = namaBandField.getText();
+                lokasi = lokasiField.getText();
+                tanggal = dateChooser.getDate();
+                jam = new java.sql.Time(((Date) timeSpinner.getValue()).getTime());
+
+           Calendar selectedDateTime = Calendar.getInstance();
+          selectedDateTime.setTime(tanggal); // tanggal dari JDateChooser
+
+          Calendar selectedTimeCal = Calendar.getInstance();
+          selectedTimeCal.setTime((Date) timeSpinner.getValue()); // waktu dari spinner
+
+          // Set jam dan menit ke tanggal
+          selectedDateTime.set(Calendar.HOUR_OF_DAY, selectedTimeCal.get(Calendar.HOUR_OF_DAY));
+          selectedDateTime.set(Calendar.MINUTE, selectedTimeCal.get(Calendar.MINUTE));
+
+          // Ambil Date final
+          Date finalSelectedDateTime = selectedDateTime.getTime();
+
+          // Sekarang bandingkan
+          if (finalSelectedDateTime.before(now)) {
+              JOptionPane.showMessageDialog(this, 
+                  "Jam Tidak Boleh Waktu Lampau", 
+                  "Error", 
+                  JOptionPane.ERROR_MESSAGE);
+              return;
+          }
 
             if (nama_konser.isEmpty() || nama_band.isEmpty() || lokasi.isEmpty() || tanggal == null) {
                 JOptionPane.showMessageDialog(this, "Lengkapi semua field!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            
 
             tambahData(id_admin, id_kategori, nama_konser, nama_band, lokasi, tanggal, jam);
         });
