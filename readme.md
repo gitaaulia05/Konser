@@ -62,4 +62,5 @@ Seiring meningkatnya kebutuhan layanan hiburan digital, sistem ini hadir sebagai
 
 ## 🎬 Demo Aplikasi
 
-[![Tonton Video di YouTube](https://img.youtube.com/vi/r3W1kWThiKI?si=FQ6vIQY1GrCQd4n8/0.jpg)](https://www.youtube.com/watch?v=r3W1kWThiKI?si=FQ6vIQY1GrCQd4n8)
+[![Tonton Video di YouTube](https://img.youtube.com/vi/r3W1kWThiKI/0.jpg)](https://www.youtube.com/watch?v=r3W1kWThiKI)
+
